@@ -24,7 +24,7 @@ El número de WhatsApp del taller se configura en una sola línea, al principio
 del `<script>` de `pedido/index.html`:
 
 ```js
-var WHATSAPP = "";   // formato internacional sin + ni espacios, ej. 584141234567
+var WHATSAPP = "584162054982";   // formato internacional, sin + ni espacios
 ```
 
 ## Publicar con GitHub Pages
