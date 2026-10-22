@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ficha de Pedido</title>
+<meta name="description" content="Ficha de pedido para cama a medida - Ingenia Mobiliario">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+<style>
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0}
+img,svg{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+/* Misma identidad que la página de la Nube: franja azul, bandas tintadas, festón */
+:root{
+  --azul:#0B1F3A; --blanco:#FFFFFF; --azul2:#6C7C92;
+  --fondo:#FFFFFF; --texto:#0B1F3A; --suave:#5A6B80; --borde:#DDE2E8; --caja:#F7F8FA;
+  --sel:#0B1F3A; --deco:#0B1F3A; --tinte:#F0F3F8; --hilo:rgba(11,31,58,.05);
+  --ok:#1D6E4F; --alerta:#A8690C; --error:#A32D2D;
+  color-scheme:light;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+body{background:var(--fondo);color:var(--texto);font-family:var(--f);font-size:16px;line-height:1.6;font-weight:400}
+.inner{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:linear-gradient(104deg,#0B1F3A 0%,#0B1F3A 44%,#13294A 62%,#2C4260 80%,#53637B 94%,var(--azul2) 100%);overflow:hidden}
+header .inner{padding-block:24px 26px;display:flex;align-items:center;gap:18px}
+.hrow{display:flex;align-items:center;gap:18px;flex:1;min-width:0}
+.marca{height:clamp(50px,11vw,74px);width:auto;display:block;flex:none}
+.deco{flex:1;min-width:0;display:flex;justify-content:flex-end;align-items:center;color:#FFF}
+.deco svg{width:100%;max-width:280px;height:auto;display:block}
+.rule{height:2px;background:var(--azul)}
+.intro .inner{padding-block:26px 8px;display:flex;flex-direction:column;gap:7px}
+h1{font-size:clamp(24px,5.5vw,34px);font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.baja{margin:0;color:var(--suave);font-size:15px;font-weight:300;max-width:58ch}
+main .inner{padding-block:22px 10px;display:flex;flex-direction:column;gap:26px}
+.tintband{background:var(--tinte);position:relative;overflow:hidden;border-block:1px solid var(--borde)}
+.tintband::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--hilo) 0 1px,transparent 1px 30px);pointer-events:none}
+.tintband .inner{position:relative;padding-block:24px}
+fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+legend{padding:0;font-size:13px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--suave);display:flex;align-items:center;gap:9px;margin-bottom:4px}
+legend::before{content:"";width:3px;height:13px;background:var(--azul);flex:none;display:inline-block}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:560px){.grid.c2{grid-template-columns:1fr 1fr}.grid.c3{grid-template-columns:1fr 1fr 1fr}}
+.f{display:flex;flex-direction:column;gap:5px;min-width:0}
+label{font-size:14px;font-weight:500}
+.ayuda{font-size:13px;color:var(--suave);font-weight:300}
+input[type=text],input[type=tel],input[type=number],input[type=date],select,textarea{
+  font-family:var(--f);font-size:16px;color:var(--texto);background:var(--blanco);
+  border:1px solid var(--borde);padding:10px 12px;width:100%;min-width:0;border-radius:0}
+textarea{resize:vertical;min-height:84px}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--azul2);outline-offset:1px;border-color:var(--azul2)}
+input[aria-invalid="true"]{border-color:var(--error)}
+.err{font-size:13px;color:var(--error);font-weight:500}
+.err:empty{display:none}
+.chk{display:flex;align-items:flex-start;gap:9px;font-weight:400;font-size:15px}
+.chk input{width:18px;height:18px;flex:none;margin-top:3px;accent-color:var(--azul)}
+.drop{border:1px dashed var(--azul2);background:var(--blanco);padding:16px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.drop input[type=file]{font-size:14px;max-width:100%}
+.minis{display:flex;flex-wrap:wrap;gap:8px}
+.minis figure{margin:0;width:74px}
+.minis img{width:74px;height:74px;object-fit:cover;border:1px solid var(--borde);display:block}
+.minis figcaption{font-size:11px;color:var(--suave);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.aviso{border-left:3px solid var(--alerta);background:rgba(168,105,12,.07);padding:12px 14px;font-size:14px;display:flex;flex-direction:column;gap:5px}
+.aviso b{color:var(--alerta)}
+.check{border:1px solid var(--borde);background:var(--blanco);padding:14px;display:flex;flex-direction:column;gap:8px}
+.check .lin{display:flex;justify-content:space-between;gap:14px;font-size:14px;align-items:baseline}
+.check .lin b{font-variant-numeric:tabular-nums;font-weight:500}
+.check .mal b{color:var(--error)}
+.check .bien b{color:var(--ok)}
+.acciones{display:flex;flex-direction:column;gap:10px}
+button{font-family:var(--f);font-size:15px;font-weight:500;padding:13px 18px;background:var(--azul);color:var(--blanco);border:1px solid var(--azul);cursor:pointer;width:100%}
+button.sec{background:transparent;color:var(--texto);border-color:var(--borde);font-weight:400}
+button:hover{opacity:.92}
+button.sec:hover{border-color:var(--azul2);opacity:1}
+button:focus-visible{outline:2px solid var(--azul2);outline-offset:2px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.aviso-env{font-size:14px;color:var(--suave);font-weight:300}
+.estado{font-size:14px;font-weight:500;min-height:1.4em}
+.estado.ok{color:var(--ok)}
+.estado.mal{color:var(--error)}
+.closer{overflow:hidden}
+.closer .inner{padding-block:18px 0;display:flex}
+.closer svg{width:100%;max-width:300px;height:auto;display:block;color:var(--azul)}
+footer{border-top:1px solid var(--borde);background:var(--tinte);position:relative;overflow:hidden;margin-top:18px}
+footer::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--hilo) 0 1px,transparent 1px 30px);pointer-events:none}
+footer .inner{position:relative;padding-block:20px;display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+footer .ico{height:34px;width:auto;display:block}
+.pie{color:var(--suave);font-size:13px;font-weight:300;margin:0}
+.pie strong{color:var(--texto);font-weight:500;display:block;font-size:14px;letter-spacing:.03em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+
+<header>
+  <div class="inner">
+    <div class="hrow">
+      <svg class="marca" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 724 230">
+  <rect width="724" height="230" fill="#0B1F3A"/>
+  <g fill="#FFFFFF">
+    <path d="M393 1490H165V0H393Z" transform="translate(60.00 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M165 0H396V795C396 872 388 1026 379 1213C487 1013 544 910 617 793L1120 0H1384V1490H1153V642C1153 556 1157 417 1168 273C1102 416 1035 529 989 603L428 1490H165Z" transform="translate(119.25 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M791 -20C1152 -20 1413 216 1413 593V764H825V576H1190C1185 338 1028 188 792 188C529 188 339 386 339 745C339 1105 532 1302 783 1302C979 1302 1112 1193 1166 1019H1400C1350 1309 1102 1510 781 1510C395 1510 113 1220 113 744C113 273 386 -20 791 -20Z" transform="translate(226.88 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M165 0H1109V196H393V655H1053V850H393V1294H1103V1490H165Z" transform="translate(333.64 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M165 0H396V795C396 872 388 1026 379 1213C487 1013 544 910 617 793L1120 0H1384V1490H1153V642C1153 556 1157 417 1168 273C1102 416 1035 529 989 603L428 1490H165Z" transform="translate(425.94 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M393 1490H165V0H393Z" transform="translate(533.57 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M51 0H298L431 393H1017L1154 0H1401L861 1490H581ZM496 583 579 829C616 943 662 1098 720 1311C779 1100 824 948 864 829L950 583Z" transform="translate(592.82 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M197 0H333V946C333 1054 330 1206 328 1333C381 1182 433 1034 469 946L859 0H984L1371 946C1407 1036 1462 1187 1511 1334C1509 1199 1507 1051 1507 946V0H1647V1490H1445L1032 468C1001 391 958 262 923 156C889 265 845 393 815 468L399 1490H197Z" transform="translate(157.33 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M778 -20C1155 -20 1423 278 1423 744C1423 1211 1155 1510 778 1510C401 1510 131 1211 131 744C131 278 400 -20 778 -20ZM778 113C485 113 269 349 269 744C269 1142 487 1377 778 1377C1068 1377 1285 1142 1285 744C1285 348 1068 113 778 113Z" transform="translate(210.44 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M197 0H732C1051 0 1200 165 1200 392C1200 617 1046 753 904 763V775C1039 810 1142 915 1142 1101C1142 1324 995 1490 704 1490H197ZM339 127V695H735C933 695 1063 561 1063 393C1063 240 956 127 729 127ZM339 817V1363H701C902 1363 1005 1254 1005 1098C1005 936 888 817 714 817Z" transform="translate(259.45 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M339 1490H197V0H339Z" transform="translate(305.28 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M197 0H1048V127H340V1490H197Z" transform="translate(339.88 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M339 1490H197V0H339Z" transform="translate(383.25 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M57 0H208L366 443H1011L1172 0H1322L771 1490H603ZM411 569 556 974C589 1068 632 1196 686 1375C740 1198 782 1073 818 974L965 569Z" transform="translate(417.86 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M197 0H339V599H684C703 599 721 600 739 601L1062 0H1226L884 629C1068 690 1164 842 1164 1041C1164 1304 998 1490 683 1490H197ZM339 727V1363H677C909 1363 1023 1236 1023 1041C1023 849 909 727 678 727Z" transform="translate(464.38 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M339 1490H197V0H339Z" transform="translate(509.78 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M778 -20C1155 -20 1423 278 1423 744C1423 1211 1155 1510 778 1510C401 1510 131 1211 131 744C131 278 400 -20 778 -20ZM778 113C485 113 269 349 269 744C269 1142 487 1377 778 1377C1068 1377 1285 1142 1285 744C1285 348 1068 113 778 113Z" transform="translate(544.38 190.00) scale(0.01416 -0.01416)"/>
+  </g>
+  <rect x="58.00" y="71.48" width="31.25" height="5.04" fill="#0B1F3A"/>
+</svg>
+      <span class="sr">Ingenia Mobiliario</span>
+      <div class="deco" aria-hidden="true">
+        <svg viewBox="0 0 307 26" fill="currentColor" preserveAspectRatio="xMaxYMid meet">
+          <rect x="0" y="0" width="22" height="26" rx="11" opacity=".055"/>
+          <rect x="29" y="0" width="22" height="26" rx="11" opacity=".071"/>
+          <rect x="58" y="0" width="13" height="26" rx="6.5" opacity=".087"/>
+          <rect x="78" y="0" width="13" height="26" rx="6.5" opacity=".103"/>
+          <rect x="98" y="0" width="13" height="26" rx="6.5" opacity=".119"/>
+          <rect x="118" y="0" width="22" height="26" rx="11" opacity=".135"/>
+          <rect x="147" y="0" width="22" height="26" rx="11" opacity=".151"/>
+          <rect x="176" y="0" width="13" height="26" rx="6.5" opacity=".167"/>
+          <rect x="196" y="0" width="13" height="26" rx="6.5" opacity=".183"/>
+          <rect x="216" y="0" width="13" height="26" rx="6.5" opacity=".199"/>
+          <rect x="236" y="0" width="22" height="26" rx="11" opacity=".215"/>
+          <rect x="265" y="0" width="22" height="26" rx="11" opacity=".231"/>
+          <rect x="294" y="0" width="13" height="26" rx="6.5" opacity=".247"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="rule"></div>
+
+<div class="intro">
+  <div class="inner">
+    <h1>Ficha de pedido</h1>
+    <p class="baja">Para fabricarle su cama a medida necesitamos estos datos. Tómese unos minutos: cada número de aquí evita una sorpresa después. Al final se envía todo por WhatsApp en un solo mensaje.</p>
+  </div>
+</div>
+
+<form id="form" novalidate>
+<main>
+  <div class="inner">
+
+    <fieldset>
+      <legend>Sus datos</legend>
+      <div class="grid c2">
+        <div class="f">
+          <label for="nombre">Nombre y apellido</label>
+          <input type="text" id="nombre" name="nombre" autocomplete="name" required>
+          <p class="err" id="e-nombre"></p>
+        </div>
+        <div class="f">
+          <label for="whatsapp">WhatsApp</label>
+          <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" placeholder="0414 1234567" required>
+          <p class="err" id="e-whatsapp"></p>
+        </div>
+        <div class="f">
+          <label for="ciudad">Ciudad y zona</label>
+          <input type="text" id="ciudad" name="ciudad" autocomplete="address-level2">
+        </div>
+        <div class="f">
+          <label for="fecha">¿Para cuándo la necesita?</label>
+          <input type="date" id="fecha" name="fecha">
+          <p class="ayuda">Opcional. Nos ayuda a ubicarla en el taller.</p>
+        </div>
+      </div>
+    </fieldset>
+
+  </div>
+</main>
+
+<div class="tintband">
+  <div class="inner">
+    <fieldset>
+      <legend>Fotos</legend>
+      <p class="ayuda">Mientras más fotos, mejor. No se preocupe por el nombre del modelo: eso lo definimos nosotros al verlas.</p>
+      <div class="drop">
+        <label for="fotoref"><b>Fotos de referencia</b> — la cama que le gusta</label>
+        <input type="file" id="fotoref" accept="image/*" multiple>
+        <p class="ayuda">Pueden ser de internet, de una revista o de una cama que haya visto.</p>
+        <div class="minis" id="m-ref"></div>
+      </div>
+      <div class="drop">
+        <label for="fotoesp"><b>Fotos del espacio</b> — dónde va a ir la cama</label>
+        <input type="file" id="fotoesp" accept="image/*" multiple>
+        <p class="ayuda">De frente y desde la puerta. Si hay closet, ventana o aire acondicionado cerca, que salgan.</p>
+        <div class="minis" id="m-esp"></div>
+      </div>
+      <div class="aviso">
+        <b>Las fotos se envían aparte</b>
+        <span>Esta página prepara el mensaje con sus datos. Cuando se abra WhatsApp, <b>adjunte las mismas fotos en ese chat</b>. Es un segundo paso y se lo recordamos en pantalla.</span>
+      </div>
+    </fieldset>
+  </div>
+</div>
+
+<main>
+  <div class="inner">
+
+    <fieldset>
+      <legend>El espacio</legend>
+      <p class="ayuda">Mida la pared donde va la cabecera y lo que hay disponible hacia los lados. En centímetros.</p>
+      <div class="grid c3">
+        <div class="f">
+          <label for="esp_ancho">Ancho disponible</label>
+          <input type="number" id="esp_ancho" inputmode="decimal" min="0" step="0.5" required>
+          <p class="err" id="e-esp_ancho"></p>
+        </div>
+        <div class="f">
+          <label for="esp_largo">Fondo disponible</label>
+          <input type="number" id="esp_largo" inputmode="decimal" min="0" step="0.5" required>
+          <p class="err" id="e-esp_largo"></p>
+        </div>
+        <div class="f">
+          <label for="esp_alto">Alto del techo</label>
+          <input type="number" id="esp_alto" inputmode="decimal" min="0" step="0.5">
+        </div>
+      </div>
+      <div class="grid c2">
+        <div class="f">
+          <label for="puerta">Ancho de la puerta del cuarto</label>
+          <input type="number" id="puerta" inputmode="decimal" min="0" step="0.5" required>
+          <p class="ayuda">Importante. La cama se fabrica en partes, pero tienen que pasar.</p>
+          <p class="err" id="e-puerta"></p>
+        </div>
+        <div class="f">
+          <label for="acceso">¿Hay escaleras o pasillos estrechos?</label>
+          <select id="acceso">
+            <option value="no">No, entrada directa</option>
+            <option value="escaleras">Sí, hay escaleras</option>
+            <option value="pasillo">Sí, pasillo estrecho o vuelta cerrada</option>
+            <option value="ascensor">Hay que subir en ascensor</option>
+          </select>
+        </div>
+      </div>
+      <div class="f">
+        <label for="obstaculos">¿Qué hay alrededor?</label>
+        <textarea id="obstaculos" placeholder="Closet que abre hacia la cama, ventana, aire acondicionado, tomacorrientes, rodapié…"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>El colchón</legend>
+      <div class="grid c3">
+        <div class="f">
+          <label for="col_ancho">Ancho</label>
+          <input type="number" id="col_ancho" inputmode="decimal" min="0" step="0.5" required>
+          <p class="err" id="e-col_ancho"></p>
+        </div>
+        <div class="f">
+          <label for="col_largo">Largo</label>
+          <input type="number" id="col_largo" inputmode="decimal" min="0" step="0.5" required>
+          <p class="err" id="e-col_largo"></p>
+        </div>
+        <div class="f">
+          <label for="col_alto">Alto</label>
+          <input type="number" id="col_alto" inputmode="decimal" min="0" step="0.5" required>
+          <p class="err" id="e-col_alto"></p>
+        </div>
+      </div>
+      <div class="grid c2">
+        <div class="f">
+          <label for="col_estado">¿Ya lo tiene?</label>
+          <select id="col_estado">
+            <option value="lo_tiene">Sí, ya lo tengo</option>
+            <option value="por_comprar">Todavía no, lo voy a comprar</option>
+          </select>
+        </div>
+        <div class="f">
+          <label for="col_marca">Marca o modelo</label>
+          <input type="text" id="col_marca" placeholder="Opcional">
+        </div>
+      </div>
+      <div class="aviso" id="av-colchon" hidden>
+        <b>Mida el colchón, no la etiqueta</b>
+        <span>Un colchón "king" rara vez mide exacto lo que dice la etiqueta. Si ya lo tiene, póngale la cinta métrica: la cama se fabrica contra esa medida.</span>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>La cama</legend>
+      <div class="grid c2">
+        <div class="f">
+          <label for="faldon">Altura de faldón que quiere</label>
+          <input type="number" id="faldon" inputmode="decimal" min="0" step="0.5" value="29" required>
+          <p class="ayuda">Del piso hasta donde apoya el colchón. Lo normal va entre 25 y 35 cm.</p>
+          <p class="err" id="e-faldon"></p>
+        </div>
+        <div class="f">
+          <label for="esp_alto_desea">Alto del espaldar</label>
+          <input type="number" id="esp_alto_desea" inputmode="decimal" min="0" step="0.5" placeholder="Desde el piso">
+          <p class="ayuda">Si no sabe, déjelo en blanco y lo proponemos nosotros.</p>
+        </div>
+      </div>
+      <div class="grid c2">
+        <div class="f">
+          <label class="chk"><input type="checkbox" id="lleva_espaldar" checked> Lleva espaldar</label>
+          <label class="chk"><input type="checkbox" id="lleva_piecero"> Lleva piecero</label>
+        </div>
+        <div class="f">
+          <label class="chk"><input type="checkbox" id="lleva_gavetas"> Lleva gavetas abajo</label>
+          <label class="chk"><input type="checkbox" id="lleva_mesas"> Quiere mesas de noche a juego</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>La tela</legend>
+      <div class="grid c3">
+        <div class="f">
+          <label for="tela_tipo">Tipo de tela</label>
+          <select id="tela_tipo">
+            <option value="">No sé, recomiéndenme</option>
+            <option value="suede">Suede</option>
+            <option value="chenille">Chenille</option>
+            <option value="lino">Lino sintético</option>
+            <option value="otra">Otra</option>
+          </select>
+        </div>
+        <div class="f">
+          <label for="tela_color">Color que busca</label>
+          <input type="text" id="tela_color" placeholder="Beige, gris, azul…">
+        </div>
+        <div class="f">
+          <label for="tela_muestra">¿Tiene una muestra?</label>
+          <select id="tela_muestra">
+            <option value="no">No</option>
+            <option value="si">Sí, tengo una muestra o foto</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Algo más</legend>
+      <div class="f">
+        <label for="notas">Lo que quiera agregar</label>
+        <textarea id="notas" placeholder="Detalles que le importan, cosas que no le gustan de su cama actual, presupuesto que tiene en mente…"></textarea>
+      </div>
+    </fieldset>
+
+  </div>
+</main>
+
+<div class="tintband">
+  <div class="inner">
+    <fieldset>
+      <legend>Comprobación</legend>
+      <p class="ayuda">Esto se calcula solo, con sus medidas, para avisarle si algo no cuadra antes de fabricar.</p>
+      <div class="check" id="check">
+        <div class="lin"><span>Llene el colchón y el espacio para ver la comprobación.</span></div>
+      </div>
+    </fieldset>
+  </div>
+</div>
+
+<main>
+  <div class="inner">
+    <div class="acciones">
+      <button type="submit" id="enviar">Enviar por WhatsApp</button>
+      <div class="dos">
+        <button type="button" class="sec" id="copiar">Copiar los datos</button>
+        <button type="button" class="sec" id="descargar">Descargar ficha</button>
+      </div>
+      <p class="estado" id="estado" role="status"></p>
+      <p class="aviso-env">Al tocar enviar se abre WhatsApp con el mensaje listo. Usted solo le da enviar y adjunta las fotos en ese mismo chat.</p>
+    </div>
+  </div>
+</main>
+</form>
+
+<div class="closer" aria-hidden="true">
+  <div class="inner">
+    <svg viewBox="0 0 307 26" fill="currentColor" preserveAspectRatio="xMinYMid meet">
+      <rect x="0" y="0" width="22" height="26" rx="11" opacity=".2"/>
+      <rect x="29" y="0" width="22" height="26" rx="11" opacity=".17"/>
+      <rect x="58" y="0" width="13" height="26" rx="6.5" opacity=".145"/>
+      <rect x="78" y="0" width="13" height="26" rx="6.5" opacity=".12"/>
+      <rect x="98" y="0" width="13" height="26" rx="6.5" opacity=".1"/>
+      <rect x="118" y="0" width="22" height="26" rx="11" opacity=".082"/>
+      <rect x="147" y="0" width="22" height="26" rx="11" opacity=".066"/>
+      <rect x="176" y="0" width="13" height="26" rx="6.5" opacity=".053"/>
+      <rect x="196" y="0" width="13" height="26" rx="6.5" opacity=".042"/>
+      <rect x="216" y="0" width="13" height="26" rx="6.5" opacity=".033"/>
+      <rect x="236" y="0" width="22" height="26" rx="11" opacity=".025"/>
+      <rect x="265" y="0" width="22" height="26" rx="11" opacity=".019"/>
+      <rect x="294" y="0" width="13" height="26" rx="6.5" opacity=".014"/>
+    </svg>
+  </div>
+</div>
+
+<footer>
+  <div class="inner">
+    <svg class="ico" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112.6" ry="112.6" fill="#0B1F3A"/>
+  <g fill="#FFFFFF">
+    <rect x="123.82" y="153.60" width="31.40" height="204.80" rx="4.10"/>
+    <path d="M 183.38 157.70 L 183.38 157.70 Q 183.38 153.60 187.48 153.60 L 214.78 153.60 Q 218.88 153.60 221.12 157.03 L 283.54 252.57 Q 285.78 256.00 288.02 252.57 L 350.44 157.03 Q 352.68 153.60 356.78 153.60 L 384.09 153.60 Q 388.18 153.60 388.18 157.70 L 388.18 354.30 Q 388.18 358.40 384.09 358.40 L 360.87 358.40 Q 356.78 358.40 356.78 354.30 L 356.78 197.97 Q 356.78 193.88 354.54 197.31 L 288.02 298.99 Q 285.78 302.42 283.54 298.99 L 217.03 197.31 Q 214.78 193.88 214.78 197.97 L 214.78 354.30 Q 214.78 358.40 210.69 358.40 L 187.48 358.40 Q 183.38 358.40 183.38 354.30 Z"/>
+  </g>
+</svg>
+    <p class="pie"><strong>INGENIA MOBILIARIO</strong>Camas, muebles y closets a medida</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+// ---- Número de WhatsApp del taller. Formato internacional sin + ni espacios.
+var WHATSAPP = "";
+
+var $ = function(id){ return document.getElementById(id); };
+var form = $('form'), estado = $('estado');
+var FOTOS = { referencia: [], espacio: [] };
+
+var CAMPOS = [
+  ['nombre','texto','Escriba su nombre'],
+  ['whatsapp','texto','Necesitamos un número para responderle'],
+  ['esp_ancho','num','Falta el ancho disponible'],
+  ['esp_largo','num','Falta el fondo disponible'],
+  ['puerta','num','Falta el ancho de la puerta'],
+  ['col_ancho','num','Falta el ancho del colchón'],
+  ['col_largo','num','Falta el largo del colchón'],
+  ['col_alto','num','Falta el alto del colchón'],
+  ['faldon','num','Falta la altura de faldón']
+];
+
+function val(id){ var e=$(id); return e ? e.value.trim() : ''; }
+function num(id){ var v=parseFloat(val(id)); return isFinite(v) ? v : null; }
+function marca(id,msg){
+  var e=$(id), p=$('e-'+id);
+  if(e) e.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  if(p) p.textContent = msg || '';
+}
+
+function validar(){
+  var malo=null;
+  CAMPOS.forEach(function(c){
+    var id=c[0], tipo=c[1], msg=c[2], v=val(id), ok;
+    ok = tipo==='num' ? (num(id)!==null && num(id)>0) : v.length>1;
+    marca(id, ok?'':msg);
+    if(!ok && !malo) malo=id;
+  });
+  return malo;
+}
+
+// ---------- comprobación en vivo ----------
+var VUELO = 17;   // panza de la figura más la goma, estimado
+var CEJA  = 2.5;  // marco que retiene el colchón, por lado
+
+function linea(txt, valor, clase){
+  return '<div class="lin '+(clase||'')+'"><span>'+txt+'</span><b>'+valor+'</b></div>';
+}
+function comprobar(){
+  var ca=num('col_ancho'), cl=num('col_largo'), ea=num('esp_ancho'), el=num('esp_largo'), pu=num('puerta');
+  var box=$('check');
+  if(!ca||!cl){ box.innerHTML = linea('Llene el colchón y el espacio para ver la comprobación.',''); return null; }
+  var anchoBox = ca + 2*CEJA, largoBox = cl + 2*CEJA;
+  var anchoFin = anchoBox + 2*VUELO, largoFin = largoBox + VUELO;
+  var h = linea('Ancho aproximado de la cama terminada', anchoFin.toFixed(1)+' cm');
+  h += linea('Largo aproximado con espaldar', largoFin.toFixed(1)+' cm');
+  var aviso = [];
+  if(ea){
+    var libre = ea - anchoFin;
+    h += linea('Espacio libre a los lados', libre.toFixed(1)+' cm', libre<0?'mal':(libre<20?'':'bien'));
+    if(libre<0) aviso.push('La cama no entra a lo ancho. Hay que reducir el diseño o el colchón.');
+    else if(libre<20) aviso.push('Queda justa a lo ancho: menos de 10 cm por lado para caminar.');
+  }
+  if(el){
+    var libreL = el - largoFin;
+    h += linea('Espacio libre al pie', libreL.toFixed(1)+' cm', libreL<0?'mal':(libreL<40?'':'bien'));
+    if(libreL<0) aviso.push('No alcanza el fondo del cuarto.');
+    else if(libreL<40) aviso.push('Queda poco espacio al pie de la cama para pasar.');
+  }
+  if(pu){
+    var medio = (largoBox/2);
+    h += linea('Pieza más grande que debe pasar la puerta', medio.toFixed(1)+' cm de fondo',
+               pu < 75 ? 'mal' : 'bien');
+    if(pu < 75) aviso.push('La puerta es angosta. Cuéntenos para fabricar el box en más partes.');
+  }
+  box.innerHTML = h;
+  aviso.forEach(function(a){
+    box.insertAdjacentHTML('beforeend','<div class="lin mal"><span>'+a+'</span><b></b></div>');
+  });
+  return {anchoFin:anchoFin, largoFin:largoFin, avisos:aviso};
+}
+
+// ---------- fotos ----------
+function miniaturas(input, caja, destino){
+  input.addEventListener('change', function(){
+    var fs = Array.prototype.slice.call(input.files||[]);
+    FOTOS[destino] = fs.map(function(f){ return f.name; });
+    caja.innerHTML='';
+    fs.slice(0,12).forEach(function(f){
+      var fig=document.createElement('figure');
+      var img=document.createElement('img');
+      img.alt=''; img.src=URL.createObjectURL(f);
+      img.onload=function(){ URL.revokeObjectURL(img.src); };
+      var cap=document.createElement('figcaption'); cap.textContent=f.name;
+      fig.appendChild(img); fig.appendChild(cap); caja.appendChild(fig);
+    });
+  });
+}
+miniaturas($('fotoref'), $('m-ref'), 'referencia');
+miniaturas($('fotoesp'), $('m-esp'), 'espacio');
+
+// ---------- datos ----------
+function ficha(){
+  var c = comprobar();
+  return {
+    schema: "ingenia.pedido.v1",
+    enviado: new Date().toISOString(),
+    taller: { modelo: null, nombre_mueble: null, presupuesto: null },
+    cliente: {
+      nombre: val('nombre'), whatsapp: val('whatsapp'),
+      ciudad: val('ciudad'), entrega_deseada: val('fecha') || null
+    },
+    espacio: {
+      ancho_cm: num('esp_ancho'), fondo_cm: num('esp_largo'), alto_cm: num('esp_alto'),
+      puerta_cm: num('puerta'), acceso: val('acceso'), obstaculos: val('obstaculos')
+    },
+    colchon: {
+      ancho_cm: num('col_ancho'), largo_cm: num('col_largo'), alto_cm: num('col_alto'),
+      estado: val('col_estado'), marca: val('col_marca')
+    },
+    cama: {
+      faldon_cm: num('faldon'),
+      espaldar: $('lleva_espaldar').checked,
+      espaldar_alto_cm: num('esp_alto_desea'),
+      piecero: $('lleva_piecero').checked,
+      gavetas: $('lleva_gavetas').checked,
+      mesas_de_noche: $('lleva_mesas').checked
+    },
+    tela: { tipo: val('tela_tipo') || null, color: val('tela_color'), muestra: val('tela_muestra')==='si' },
+    fotos: { referencia: FOTOS.referencia, espacio: FOTOS.espacio },
+    estimado: c ? { ancho_terminado_cm: +c.anchoFin.toFixed(1), largo_terminado_cm: +c.largoFin.toFixed(1), avisos: c.avisos } : null,
+    notas: val('notas')
+  };
+}
+
+function siNo(b){ return b ? 'sí' : 'no'; }
+function cm(v){ return v===null||v===undefined ? '—' : v+' cm'; }
+
+function mensaje(){
+  var d = ficha(), L = [];
+  L.push('*FICHA DE PEDIDO — INGENIA MOBILIARIO*');
+  L.push('');
+  L.push('*Cliente:* '+d.cliente.nombre);
+  L.push('*WhatsApp:* '+d.cliente.whatsapp);
+  if(d.cliente.ciudad) L.push('*Ciudad:* '+d.cliente.ciudad);
+  if(d.cliente.entrega_deseada) L.push('*La necesita para:* '+d.cliente.entrega_deseada);
+  L.push('');
+  L.push('*COLCHÓN*  '+cm(d.colchon.ancho_cm)+' x '+cm(d.colchon.largo_cm)+' x '+cm(d.colchon.alto_cm));
+  L.push(d.colchon.estado==='lo_tiene' ? 'Ya lo tiene.' : 'Todavía lo va a comprar.');
+  if(d.colchon.marca) L.push('Marca: '+d.colchon.marca);
+  L.push('');
+  L.push('*ESPACIO*');
+  L.push('Ancho disponible: '+cm(d.espacio.ancho_cm));
+  L.push('Fondo disponible: '+cm(d.espacio.fondo_cm));
+  if(d.espacio.alto_cm) L.push('Alto del techo: '+cm(d.espacio.alto_cm));
+  L.push('Puerta del cuarto: '+cm(d.espacio.puerta_cm));
+  L.push('Acceso: '+d.espacio.acceso);
+  if(d.espacio.obstaculos) L.push('Alrededor: '+d.espacio.obstaculos);
+  L.push('');
+  L.push('*LA CAMA*');
+  L.push('Faldón: '+cm(d.cama.faldon_cm));
+  L.push('Espaldar: '+siNo(d.cama.espaldar)+(d.cama.espaldar_alto_cm?' ('+cm(d.cama.espaldar_alto_cm)+')':''));
+  L.push('Piecero: '+siNo(d.cama.piecero)+'   Gavetas: '+siNo(d.cama.gavetas));
+  L.push('Mesas de noche: '+siNo(d.cama.mesas_de_noche));
+  L.push('');
+  L.push('*TELA*  '+(d.tela.tipo||'a recomendar')+(d.tela.color?' · '+d.tela.color:'')+(d.tela.muestra?' · tiene muestra':''));
+  L.push('');
+  L.push('*FOTOS*  '+d.fotos.referencia.length+' de referencia, '+d.fotos.espacio.length+' del espacio');
+  L.push('(las adjunto en este chat)');
+  if(d.notas){ L.push(''); L.push('*NOTAS*'); L.push(d.notas); }
+  if(d.estimado){
+    L.push('');
+    L.push('_Estimado automático: '+d.estimado.ancho_terminado_cm+' x '+d.estimado.largo_terminado_cm+' cm terminada._');
+    d.estimado.avisos.forEach(function(a){ L.push('_⚠ '+a+'_'); });
+  }
+  L.push('');
+  L.push('```');
+  L.push(JSON.stringify(d));
+  L.push('```');
+  return L.join('\n');
+}
+
+function aviso(txt, mal){
+  estado.textContent = txt;
+  estado.className = 'estado ' + (mal ? 'mal' : 'ok');
+}
+
+form.addEventListener('submit', function(ev){
+  ev.preventDefault();
+  var malo = validar();
+  if(malo){
+    aviso('Faltan datos. Revise lo marcado en rojo.', true);
+    var e=$(malo); if(e){ e.focus(); e.scrollIntoView({block:'center', behavior:'smooth'}); }
+    return;
+  }
+  var txt = encodeURIComponent(mensaje());
+  var url = WHATSAPP ? ('https://wa.me/'+WHATSAPP+'?text='+txt) : ('https://wa.me/?text='+txt);
+  aviso('Abriendo WhatsApp. No olvide adjuntar las fotos en ese chat.');
+  window.open(url, '_blank');
+});
+
+$('copiar').addEventListener('click', function(){
+  var malo = validar();
+  if(malo){ aviso('Faltan datos. Revise lo marcado en rojo.', true); return; }
+  var t = mensaje();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){
+      aviso('Datos copiados. Péguelos donde quiera.');
+    }, function(){ fallback(t); });
+  } else { fallback(t); }
+  function fallback(t){
+    var ta=document.createElement('textarea');
+    ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); aviso('Datos copiados.'); }
+    catch(e){ aviso('No se pudo copiar. Use el botón de WhatsApp.', true); }
+    document.body.removeChild(ta);
+  }
+});
+
+$('descargar').addEventListener('click', function(){
+  var malo = validar();
+  if(malo){ aviso('Faltan datos. Revise lo marcado en rojo.', true); return; }
+  var d = ficha();
+  var nom = (d.cliente.nombre||'pedido').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  var blob = new Blob([JSON.stringify(d,null,2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ingenia-pedido-'+nom+'.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+  aviso('Ficha descargada.');
+});
+
+// ---------- borrador local ----------
+var IDS = ['nombre','whatsapp','ciudad','fecha','esp_ancho','esp_largo','esp_alto','puerta','acceso',
+           'obstaculos','col_ancho','col_largo','col_alto','col_estado','col_marca','faldon',
+           'esp_alto_desea','tela_tipo','tela_color','tela_muestra','notas'];
+var CHK = ['lleva_espaldar','lleva_piecero','lleva_gavetas','lleva_mesas'];
+
+function guardar(){
+  try{
+    var o={};
+    IDS.forEach(function(i){ var e=$(i); if(e) o[i]=e.value; });
+    CHK.forEach(function(i){ var e=$(i); if(e) o[i]=e.checked; });
+    localStorage.setItem('ingenia-pedido', JSON.stringify(o));
+  }catch(e){}
+}
+function cargar(){
+  try{
+    var raw=localStorage.getItem('ingenia-pedido'); if(!raw) return;
+    var o=JSON.parse(raw);
+    IDS.forEach(function(i){ var e=$(i); if(e && o[i]!==undefined) e.value=o[i]; });
+    CHK.forEach(function(i){ var e=$(i); if(e && o[i]!==undefined) e.checked=o[i]; });
+  }catch(e){}
+}
+cargar();
+
+form.addEventListener('input', function(ev){
+  guardar(); comprobar();
+  if(ev.target && ev.target.id) marca(ev.target.id,'');
+});
+form.addEventListener('change', function(){ guardar(); comprobar(); });
+
+$('col_estado').addEventListener('change', function(){
+  $('av-colchon').hidden = this.value !== 'lo_tiene';
+});
+$('av-colchon').hidden = $('col_estado').value !== 'lo_tiene';
+comprobar();
+})();
+</script>
+
+</body>
+</html>

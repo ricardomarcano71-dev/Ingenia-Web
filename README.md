@@ -11,6 +11,21 @@ datos ni instalación: se abre en cualquier navegador.
 | Carpeta | Qué es |
 |---|---|
 | `nube-king/` | Cama Nube, tamaño king. El cliente elige cantidad de figuras y tono de tela y la ve en 3D. |
+| `pedido/` | Ficha de pedido. El cliente carga fotos y medidas; la página arma un mensaje de WhatsApp y una ficha `.json`. |
+
+## Formato de los pedidos
+
+La ficha de pedido produce un JSON con esquema `ingenia.pedido.v1`. Ese objeto
+es la unidad que se trabaja por chat y la que luego se migra a la base de datos
+del catálogo. Los campos de `taller` (modelo, nombre del mueble, presupuesto)
+van vacíos: los llena el taller, no el cliente.
+
+El número de WhatsApp del taller se configura en una sola línea, al principio
+del `<script>` de `pedido/index.html`:
+
+```js
+var WHATSAPP = "";   // formato internacional sin + ni espacios, ej. 584141234567
+```
 
 ## Publicar con GitHub Pages
 
