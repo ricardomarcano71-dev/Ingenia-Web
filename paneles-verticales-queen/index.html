@@ -512,6 +512,12 @@ ul.lista b{font-weight:600}
   plafon.position.set(0, 250, 190); esc.add(plafon);
   var apLuz = new THREE.PointLight(0xffd9a0, 0, 180, 2);
   apLuz.position.set(-100, 186, 14); esc.add(apLuz);
+  // rasante de noche: recoge el rebote de las dos lámparas de mesa y cruza el espaldar
+  // de lado. Sin ella la luz del plafón llega de frente y aplana las ranuras.
+  var raso = new THREE.DirectionalLight(0xffd9a8, 0);
+  raso.position.set(300, 150, 240);
+  raso.target.position.set(-60, 90, 0);
+  esc.add(raso); esc.add(raso.target);
 
   // ---------- cámara ----------
   var blanco = new THREE.Vector3(0, 70, 115);
@@ -614,8 +620,9 @@ ul.lista b{font-weight:600}
     sol.intensity     = noche ? 0.02 : 1.85;
     relleno.intensity = noche ? 0.02 : 0.12;
     hemi.intensity    = noche ? 0.05 : 0.07;
-    plafon.intensity  = noche ? 2.2 : 0;
+    plafon.intensity  = noche ? 1.6 : 0;
     apLuz.intensity   = noche ? 1.5 : 0;
+    raso.intensity    = noche ? 0.7 : 0;
     focos.forEach(function(f){ f.intensity = noche ? 1.8 : 0; });
     MATS.forEach(function(m){ m.envMapIntensity = noche ? 0.05 : 0.15; });
     mPantalla.emissive.setHex(noche ? 0xffcf8f : 0x000000);
