@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Cama queen de canales verticales con espaldar de pared a pared, vista en 3D dentro de la habitación a escala real. Ingenia Mobiliario.">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Cama de canales · Queen · Ingenia Mobiliario</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Source+Sans+3:wght@400;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<style>
+/* Visor: escena del cuarto arriba, controles y cifras debajo. Mismo sistema que la nube king. */
+:root{
+  --papel:#f6f5f2; --tinta:#1d2024; --grafito:#5d646d; --linea:#c9ccd1;
+  --azul:#1f5fd0; --superficie:#fffefb; --sel:#1f5fd0; --selfg:#ffffff;
+  --f-tit:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-txt:"Source Sans 3",system-ui,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --papel:#14171a; --tinta:#e8eaed; --grafito:#9aa2ab; --linea:#343a41;
+  --azul:#73a7ff; --superficie:#1b1f23; --sel:#73a7ff; --selfg:#0d1116; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --papel:#14171a; --tinta:#e8eaed; --grafito:#9aa2ab; --linea:#343a41;
+  --azul:#73a7ff; --superficie:#1b1f23; --sel:#73a7ff; --selfg:#0d1116; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel);color:var(--tinta);font-family:var(--f-txt);font-size:16px;line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:22px 40px;display:flex;flex-direction:column;gap:18px}
+.marca{font-family:var(--f-tit);font-weight:500;font-size:12px;text-transform:uppercase;
+  letter-spacing:.14em;color:var(--grafito)}
+h1{font-family:var(--f-tit);font-weight:700;font-size:clamp(22px,5vw,30px);margin:0;
+  letter-spacing:-.015em;text-wrap:balance}
+h2{font-family:var(--f-tit);font-weight:700;font-size:18px;margin:0;letter-spacing:-.01em}
+.sub{color:var(--grafito);margin:0;max-width:62ch}
+#stage{position:relative;width:100%;aspect-ratio:16/10;background:#EAE8E3;border:1px solid var(--linea);overflow:hidden}
+#stage canvas{display:block;width:100%;height:100%}
+#fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  padding:24px;text-align:center;color:#5d646d;font-size:14px}
+.hint{position:absolute;left:10px;bottom:8px;font-family:var(--f-num);font-size:11px;
+  color:#7A736A;letter-spacing:.04em;pointer-events:none}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lbl{font-family:var(--f-tit);font-size:12px;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--grafito);width:100%}
+button{font-family:var(--f-txt);font-size:14px;padding:8px 13px;background:var(--superficie);
+  color:var(--tinta);border:1px solid var(--linea);border-radius:8px;cursor:pointer;min-width:0}
+button:hover{border-color:var(--grafito)}
+button[aria-pressed="true"]{background:var(--sel);color:var(--selfg);border-color:var(--sel)}
+button:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+.cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;
+  background:var(--linea);border:1px solid var(--linea)}
+.cifra{background:var(--superficie);padding:10px 12px;min-width:0}
+.cifra .k{font-size:11px;color:var(--grafito);text-transform:uppercase;letter-spacing:.06em}
+.cifra .v{font-family:var(--f-num);font-weight:600;font-size:19px;font-variant-numeric:tabular-nums;margin-top:1px}
+.cifra .u{font-size:11px;color:var(--grafito)}
+.nota{border-left:3px solid var(--azul);padding:10px 13px;font-size:14px;color:var(--tinta)}
+.nota b{font-weight:600}
+.bloque{border:1px solid var(--linea);background:var(--superficie);padding:14px 16px;
+  display:flex;flex-direction:column;gap:10px}
+ul.lista{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;font-size:15px}
+ul.lista li{display:flex;gap:10px;align-items:flex-start}
+ul.lista li::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:2px;
+  background:var(--azul);margin-top:.5em}
+ul.lista b{font-weight:600}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;
+  background:var(--linea);border:1px solid var(--linea)}
+.col{background:var(--superficie);padding:13px 15px;min-width:0;display:flex;flex-direction:column;gap:5px}
+.col h3{font-family:var(--f-tit);font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--grafito);margin:0;font-weight:500}
+.col p{margin:0;font-size:14px}
+.fixed{font-size:13px;color:var(--grafito);border-top:1px solid var(--linea);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div>
+    <div class="marca">Ingenia Mobiliario · carpintería y tapicería a medida</div>
+    <h1>Cama queen de canales verticales, en su habitación</h1>
+    <p class="sub">Espaldar tapizado de pared a pared sobre los 279 cm medidos, piecero a juego y box sobre estructura reforzada. El cuarto está levantado con las medidas reales tomadas en sitio: cerámica de 31, techo de vigas inclinado y la división del clóset a 3,58 m. Arrastra para girar, rueda o pellizca para acercar.</p>
+  </div>
+
+  <div id="stage">
+    <div id="fallback">No se pudo cargar el motor 3D. Las medidas de abajo siguen siendo válidas.</div>
+    <div class="hint">arrastra para girar · pellizca o usa la rueda para acercar</div>
+  </div>
+
+  <div class="row" role="group" aria-label="Vista">
+    <span class="lbl">Vista</span>
+    <button type="button" id="b1" aria-pressed="true">Desde la entrada</button>
+    <button type="button" id="b2" aria-pressed="false">De frente</button>
+    <button type="button" id="b3" aria-pressed="false">El espaldar</button>
+    <button type="button" id="b4" aria-pressed="false">Planta</button>
+  </div>
+
+  <div class="row" role="group" aria-label="Escena">
+    <span class="lbl">Escena</span>
+    <button type="button" id="luz" aria-pressed="false">Luz de noche</button>
+    <button type="button" id="mn" aria-pressed="true">Mesas de noche</button>
+  </div>
+
+  <div class="cifras">
+    <div class="cifra"><div class="k">Espaldar</div><div class="v">277</div><div class="u">cm, pared a pared</div></div>
+    <div class="cifra"><div class="k">Altura</div><div class="v">132,5</div><div class="u">cm · 20 canales</div></div>
+    <div class="cifra"><div class="k">Colchón</div><div class="v">160 × 190</div><div class="u">queen, encaje justo</div></div>
+    <div class="cifra"><div class="k">Paso lateral</div><div class="v">55</div><div class="u">cm libres a cada lado</div></div>
+    <div class="cifra"><div class="k">Al pie</div><div class="v">149</div><div class="u">cm hasta el clóset</div></div>
+    <div class="cifra"><div class="k">Habitación</div><div class="v">279 × 358</div><div class="u">cm, techo de vigas</div></div>
+  </div>
+
+  <div class="nota"><b>Dos tomacorrientes propios en el espaldar.</b> Los que hoy están a 50 cm del piso quedan detrás del mueble, así que se alimenta una toma de cada lado a la altura de la mesa de noche. Se acabó el cable cruzando la pared.</div>
+
+  <div class="bloque">
+    <h2>Qué incluye</h2>
+    <ul class="lista">
+      <li><b>Espaldar de 277 × 132,5 cm</b> con 20 canales verticales tapizados, montado de pared a pared. Las mesas de noche quedan contra él, no contra la pared.</li>
+      <li><b>Box queen</b> sobre estructura de madera con soportes centrales y seis patas, somier completo y faldón tapizado en los tres lados a la vista.</li>
+      <li><b>Piecero a juego</b> de 12 canales, por debajo del nivel del colchón para no estorbar al acostarse.</li>
+      <li><b>Tapizado sin costuras a la vista</b> en los canales, con los cantos del marco forrados.</li>
+    </ul>
+  </div>
+
+  <div class="cols">
+    <div class="col">
+      <h3>Estructura</h3>
+      <p>Marco de madera maciza con faldones de doble alfajía y tacos, dos soportes centrales corridos y seis patas que suben hasta el tope del marco. Nada de aglomerado cargando peso.</p>
+    </div>
+    <div class="col">
+      <h3>Los canales</h3>
+      <p>Cada canal es una pieza independiente: panel rígido, goma espuma de una pulgada y la tela templada y grapada por detrás. Se atornillan uno a uno al marco ya armado.</p>
+    </div>
+    <div class="col">
+      <h3>Acabado</h3>
+      <p>Forro interior en toda la estructura para que la espuma no se hunda con el tiempo, y tela de tapicería en cada superficie que queda a la vista, cantos incluidos.</p>
+    </div>
+  </div>
+
+  <div class="bloque">
+    <h2>Antes de fabricar</h2>
+    <ul class="lista">
+      <li>La pared se mide a tres alturas el día del montaje. Sobre la menor de las tres se fabrica, para que entre sin forzar.</li>
+      <li>El color de la tela se confirma con muestra física antes de cortar.</li>
+      <li>La conexión de los tomacorrientes del espaldar queda con holgura para separarlo de la pared sin desconectar nada.</li>
+    </ul>
+  </div>
+
+  <p class="fixed">El modelo reproduce las medidas reales de la cama y de la habitación: 279 cm de pared de cabecera, 358 hasta la división del clóset, cerámica de 31 × 31, viga a 222 cm sobre la pared izquierda y techo inclinado hacia la ventana. Las mesas de noche, la lámpara y la ropa de cama son referenciales y no forman parte de esta propuesta. Propuesta sujeta a confirmación de medidas en sitio.</p>
+
+</div>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage'), fb = document.getElementById('fallback');
+  if (typeof THREE === 'undefined'){ fb.style.display = 'flex'; return; }
+
+  // ================= medidas reales tomadas en sitio (cm) =================
+  var CU_W = 279;              // pared de la cabecera (9 cerámicas de 31)
+  var CU_L = 608;              // 358 hasta la división + la zona del clóset
+  var Z_DIV = 358;             // semi división hacia el clóset
+  var H_VIGA = 222;            // MEDIDO: pared izquierda hasta la viga
+  var H_IZQ = 330;             // lado alto, el de la puerta de entrada  (SUPUESTO)
+  var H_DER = 300;             // lado bajo, el de la ventana            (3 a 3,20 según Ricardo)
+  var BALDOSA = 31;
+  var Y_TOMA = 50, Y_ALFEIZAR = 80;
+
+  var ESP_W = 277, ESP_LUZ = 272, ESP_H = 132.5;
+  var N_ESP = 20, PASO_E = ESP_LUZ / N_ESP, W_E = PASO_E - 0.4;
+  var PAT0 = 60, PAT1 = 130;
+  var BOX_W = 165, BOX_L = 195, FALDON = 25, PATA = 6, TRAV = 2.5, COLCHON = 24;
+  var Y_FALDON0 = PATA, Y_TOPE = PATA + FALDON, Y_SOMIER = Y_TOPE + TRAV;
+  var FONDO = 6.54;
+  var ZB = FONDO + 1.27, ZB1 = ZB + BOX_L;
+  var PIE_W = 171, PIE_LUZ = 166, PIE_H = 50, PIE_PISO = 5;
+  var N_PIE = 12, PASO_P = PIE_LUZ / N_PIE, W_P = PASO_P - 0.4;
+  var ZP = ZB1;
+  var X0 = -CU_W/2, X1 = CU_W/2;
+  function alturaEn(x){ return H_IZQ + (x - X0) / CU_W * (H_DER - H_IZQ); }
+
+  var ren;
+  try { ren = new THREE.WebGLRenderer({antialias:true}); }
+  catch(err){ fb.style.display = 'flex'; return; }
+  ren.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  ren.shadowMap.enabled = true;
+  ren.shadowMap.type = THREE.PCFSoftShadowMap;
+  ren.outputEncoding = THREE.sRGBEncoding;
+  ren.toneMapping = THREE.ACESFilmicToneMapping;
+  ren.toneMappingExposure = 0.72;
+  stage.insertBefore(ren.domElement, stage.firstChild);
+
+  var esc = new THREE.Scene();
+  esc.background = new THREE.Color(0xEAE8E3);
+  var cam = new THREE.PerspectiveCamera(55, 16/10, 1, 5000);
+
+  // ---------- entorno procedural (sin archivos externos) ----------
+  (function(){
+    var sc = new THREE.Scene(), g = new THREE.BoxGeometry(1,1,1);
+    function c(col, x,y,z, sx,sy,sz, lado){
+      var m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({color:col, side:lado||THREE.FrontSide}));
+      m.position.set(x,y,z); m.scale.set(sx,sy,sz); sc.add(m);
+    }
+    c(0xd5dbe4, 0,0,0, 40,26,40, THREE.BackSide);
+    c(0xffffff, 0,12.4,0, 18,0.2,18);
+    c(0xfff1de, -16,3,3, 0.2,12,14);
+    c(0xe9f0ff, 15,5,-8, 0.2,10,12);
+    var p = new THREE.PMREMGenerator(ren);
+    esc.environment = p.fromScene(sc, 0.05).texture;
+    p.dispose();
+  })();
+
+  // ---------- texturas procedurales ----------
+  function texDe(px, pinta, rep){
+    var c = document.createElement('canvas'); c.width = c.height = px;
+    pinta(c.getContext('2d'), px);
+    var t = new THREE.CanvasTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]);
+    return t;
+  }
+  function normalDe(px, campo, amp, rep){
+    var c = document.createElement('canvas'); c.width = c.height = px;
+    var ctx = c.getContext('2d'), im = ctx.createImageData(px, px);
+    var h = new Float32Array(px*px), i, j;
+    for (j = 0; j < px; j++) for (i = 0; i < px; i++) h[j*px+i] = campo(i, j, px);
+    for (j = 0; j < px; j++) for (i = 0; i < px; i++){
+      var l = h[j*px + ((i-1+px)%px)], r = h[j*px + ((i+1)%px)];
+      var u = h[((j-1+px)%px)*px + i], d = h[((j+1)%px)*px + i];
+      var nx = (l-r)*amp, ny = (u-d)*amp;
+      var len = Math.sqrt(nx*nx + ny*ny + 1), o = (j*px+i)*4;
+      im.data[o]   = (nx/len*0.5+0.5)*255;
+      im.data[o+1] = (ny/len*0.5+0.5)*255;
+      im.data[o+2] = (1/len*0.5+0.5)*255;
+      im.data[o+3] = 255;
+    }
+    ctx.putImageData(im, 0, 0);
+    var t = new THREE.CanvasTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]);
+    return t;
+  }
+  var REP_PISO = [CU_W/BALDOSA, CU_L/BALDOSA];
+  var mapPiso = texDe(192, function(x, px){
+    var g = x.createImageData(px, px), i, j;
+    for (j = 0; j < px; j++) for (i = 0; i < px; i++){
+      var v = 0.80 + Math.random()*0.06
+            + 0.05*Math.sin(i*0.09 + j*0.05) + 0.04*Math.sin(i*0.021 - j*0.033);
+      if (i < 4 || j < 4 || i > px-5 || j > px-5) v *= 0.80;
+      var o = (j*px+i)*4;
+      g.data[o] = Math.min(255, 214*v);
+      g.data[o+1] = Math.min(255, 199*v);
+      g.data[o+2] = Math.min(255, 177*v);
+      g.data[o+3] = 255;
+    }
+    x.putImageData(g, 0, 0);
+  }, REP_PISO);
+  var nrmPiso = normalDe(192, function(i, j, px){
+    return ((i < 4 || j < 4 || i > px-5 || j > px-5) ? -1.0 : 0) + Math.random()*0.10;
+  }, 2.2, REP_PISO);
+  var nTela = normalDe(256, function(i, j, px){
+    return Math.sin(i/px*Math.PI*2*48)*0.5 + Math.sin(j/px*Math.PI*2*48)*0.5
+         + (Math.random()-0.5)*0.45;
+  }, 1.1, [5, 5]);
+  var nMadera = normalDe(128, function(i, j){
+    return Math.sin(j*0.6 + Math.sin(i*0.05)*3)*0.5 + (Math.random()-0.5)*0.25;
+  }, 0.8, [1, 6]);
+
+  // ---------- materiales ----------
+  var mTela = new THREE.MeshStandardMaterial({color:0x79694f, roughness:0.93,
+    normalMap:nTela, normalScale:new THREE.Vector2(0.95, 0.95)});
+  var mTelaMarco = new THREE.MeshStandardMaterial({color:0x6b5c45, roughness:0.95,
+    normalMap:nTela, normalScale:new THREE.Vector2(0.65, 0.65)});
+  var mSabana = new THREE.MeshStandardMaterial({color:0xe9e4da, roughness:0.85});
+  var mManta  = new THREE.MeshStandardMaterial({color:0xcfc3ae, roughness:0.97,
+    normalMap:nTela, normalScale:new THREE.Vector2(1.1, 1.1)});
+  var mPiso = new THREE.MeshStandardMaterial({map:mapPiso, roughness:0.55,
+    normalMap:nrmPiso, normalScale:new THREE.Vector2(0.5, 0.5)});
+  var mPared = new THREE.MeshStandardMaterial({color:0xe7e1d6, roughness:0.97});
+  var mRodapie = new THREE.MeshStandardMaterial({color:0xcbbfae, roughness:0.75});
+  var mViga = new THREE.MeshStandardMaterial({color:0x6b3f22, roughness:0.72,
+    normalMap:nMadera, normalScale:new THREE.Vector2(0.7, 0.7)});
+  var mTabla = new THREE.MeshStandardMaterial({color:0x8a5630, roughness:0.78});
+  var mPuerta = new THREE.MeshStandardMaterial({color:0x9a5b28, roughness:0.62});
+  var mMarcoBlanco = new THREE.MeshStandardMaterial({color:0xf2eee6, roughness:0.5});
+  // vidrio esmerilado: filtra la luz, no se ve a través
+  var mVidrio = new THREE.MeshStandardMaterial({color:0xdde6e8, roughness:0.88,
+    transparent:true, opacity:0.94});
+  var mVidrioAzul = new THREE.MeshStandardMaterial({color:0x2f5fa8, roughness:0.55,
+    transparent:true, opacity:0.92});
+  var mMaderaMueble = new THREE.MeshStandardMaterial({color:0x7d5a3c, roughness:0.68});
+  var mMetal = new THREE.MeshStandardMaterial({color:0xc8b48c, roughness:0.3, metalness:0.85});
+  var mPantalla = new THREE.MeshStandardMaterial({color:0xfdf6e8, roughness:0.9,
+    emissive:0x000000, side:THREE.DoubleSide});
+  var mToma = new THREE.MeshStandardMaterial({color:0xeae6de, roughness:0.5});
+  var mHueco = new THREE.MeshStandardMaterial({color:0x33312e, roughness:0.85});
+  // el rebote del entorno es lo que aplanaba todo: se baja fuerte para que mande la luz direccional
+  var MATS = [mTela, mTelaMarco, mSabana, mManta, mPiso, mPared, mRodapie, mViga, mTabla,
+   mPuerta, mMarcoBlanco, mMaderaMueble, mToma, mHueco];
+  MATS.forEach(function(m){ m.envMapIntensity = 0.22; });
+  mMetal.envMapIntensity = 0.85;
+  mVidrio.envMapIntensity = 0.9;
+  mVidrioAzul.envMapIntensity = 0.7;
+
+  function caja(x0,x1,y0,y1,z0,z1,mat,padre,sombra){
+    var g = new THREE.BoxGeometry(Math.abs(x1-x0), Math.abs(y1-y0), Math.abs(z1-z0));
+    var m = new THREE.Mesh(g, mat);
+    m.position.set((x0+x1)/2, (y0+y1)/2, (z0+z1)/2);
+    m.receiveShadow = true;                 // las paredes y el piso SIEMPRE reciben sombra
+    if (sombra !== false) m.castShadow = true;
+    (padre || esc).add(m);
+    return m;
+  }
+  function cojin(w, h, prof, r){
+    var s = new THREE.Shape(), x = -w/2, y = -h/2;
+    s.moveTo(x+r, y);
+    s.lineTo(x+w-r, y); s.quadraticCurveTo(x+w, y, x+w, y+r);
+    s.lineTo(x+w, y+h-r); s.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    s.lineTo(x+r, y+h); s.quadraticCurveTo(x, y+h, x, y+h-r);
+    s.lineTo(x, y+r); s.quadraticCurveTo(x, y, x+r, y);
+    var g = new THREE.ExtrudeGeometry(s, {depth:prof, bevelEnabled:true,
+      bevelSize:1.45, bevelThickness:1.35, bevelSegments:4, curveSegments:4});
+    g.computeVertexNormals();
+    return g;
+  }
+  function panel(xc, yc, zc, w, h, prof){
+    var m = new THREE.Mesh(cojin(w, h, prof, 1.2), mTela);
+    m.position.set(xc, yc, zc);
+    m.castShadow = true; m.receiveShadow = true; esc.add(m);
+  }
+
+  // ================= la habitación =================
+  caja(X0, X1, -2, 0, -2, CU_L, mPiso, null, false).receiveShadow = true;
+
+  var NSL = 30, s, xa, xb;
+  for (s = 0; s < NSL; s++){                      // pared de la cabecera, tope inclinado
+    xa = X0 + s*(CU_W/NSL); xb = xa + CU_W/NSL;
+    caja(xa, xb, 0, alturaEn((xa+xb)/2) + 6, -9, 0, mPared, null, false);
+  }
+  for (s = 0; s < NSL; s++){                      // pared del fondo
+    xa = X0 + s*(CU_W/NSL); xb = xa + CU_W/NSL;
+    caja(xa, xb, 0, alturaEn((xa+xb)/2) + 6, CU_L, CU_L+9, mPared, null, false);
+  }
+
+  // --- pared izquierda (lado alto): puerta del vestier + puerta de entrada ---
+  // las dos van AL RAS de la pared, sin resalte
+  var VEST0 = 22, VEST1 = 102;                    // puerta del vestier, junto a la cabecera
+  var ENT0 = 322, ENT1 = 402;                     // entrada, casi frente a la división
+  var P_ALTO = 203;
+  caja(X0-9, X0, 0, H_IZQ+6, -9, VEST0, mPared, null, false);
+  caja(X0-9, X0, 0, H_IZQ+6, VEST1, ENT0, mPared, null, false);
+  caja(X0-9, X0, 0, H_IZQ+6, ENT1, CU_L, mPared, null, false);
+  caja(X0-9, X0, P_ALTO, H_IZQ+6, VEST0, VEST1, mPared, null, false);
+  caja(X0-9, X0, P_ALTO, H_IZQ+6, ENT0, ENT1, mPared, null, false);
+  caja(X0, X0+0.8, 0, P_ALTO, VEST0, VEST1, mPuerta, null, false);
+  caja(X0, X0+0.8, 0, P_ALTO, ENT0, ENT1, mPuerta, null, false);
+
+  // --- pared derecha (lado bajo): ventana ---
+  var VZ0 = 150, VZ1 = 262, V_ALTO = 205, V_AZUL = 178;
+  caja(X1, X1+9, 0, H_DER+6, -9, VZ0, mPared, null, false);
+  caja(X1, X1+9, 0, H_DER+6, VZ1, CU_L, mPared, null, false);
+  caja(X1, X1+9, 0, Y_ALFEIZAR, VZ0, VZ1, mPared, null, false);
+  caja(X1, X1+9, V_ALTO, H_DER+6, VZ0, VZ1, mPared, null, false);
+  caja(X1-1, X1+2, Y_ALFEIZAR-4, Y_ALFEIZAR, VZ0-4, VZ1+4, mMarcoBlanco, null, false);
+  caja(X1-1, X1+2, Y_ALFEIZAR, V_AZUL, VZ0, VZ1, mVidrio, null, false);
+  caja(X1-1, X1+2, V_AZUL, V_ALTO, VZ0, VZ1, mVidrioAzul, null, false);
+  [[VZ0, VZ0+4],[VZ1-4, VZ1],[(VZ0+VZ1)/2-2, (VZ0+VZ1)/2+2]].forEach(function(b){
+    caja(X1-2, X1+2, Y_ALFEIZAR, V_ALTO, b[0], b[1], mMarcoBlanco, null, false);
+  });
+  caja(X1-2, X1+2, V_AZUL-2, V_AZUL+2, VZ0, VZ1, mMarcoBlanco, null, false);
+  caja(X1-2, X1+2, V_ALTO, V_ALTO+4, VZ0-4, VZ1+4, mMarcoBlanco, null, false);
+
+  // semi división del clóset, saliendo de la pared derecha
+  caja(85, X1, 0, H_DER, Z_DIV, Z_DIV+11, mPared, null, false);
+
+  // rodapié de cerámica
+  caja(X0, X1, 0, 7, -1.5, 0, mRodapie, null, false);
+  caja(X0, X0+1.5, 0, 7, 0, CU_L, mRodapie, null, false);
+  caja(X1-1.5, X1, 0, 7, 0, CU_L, mRodapie, null, false);
+  // viga de la pared izquierda, a los 222 medidos: resalte de 3 cm, del color de la pared
+  caja(X0, X0+3, H_VIGA, H_VIGA+12, -9, CU_L, mPared, null, false);
+
+  // techo de vigas, inclinado del lado alto (izquierda) al bajo (ventana)
+  var techo = new THREE.Group(); esc.add(techo);
+  var incl = Math.atan2(H_DER - H_IZQ, CU_W);
+  var LV = Math.hypot(CU_W, H_DER - H_IZQ);
+  var yMedio = (H_IZQ + H_DER) / 2;
+  var tablas = new THREE.Mesh(new THREE.BoxGeometry(LV + 18, 5, CU_L + 18), mTabla);
+  tablas.position.set(0, yMedio + 22, (CU_L - 9)/2);
+  tablas.rotation.z = incl; tablas.receiveShadow = true; techo.add(tablas);
+  for (var v = 0; v <= 11; v++){
+    var viga = new THREE.Mesh(new THREE.BoxGeometry(LV + 14, 14, 9), mViga);
+    viga.position.set(0, yMedio + 12, -4 + v * (CU_L + 8) / 11);
+    viga.rotation.z = incl; viga.castShadow = true; viga.receiveShadow = true;
+    techo.add(viga);
+  }
+
+  // tomacorrientes existentes (los que el espaldar va a tapar) y aplique
+  [-62, 78].forEach(function(xt){
+    caja(xt-4, xt+4, Y_TOMA-6, Y_TOMA+6, 0, 0.9, mToma, null, false);
+  });
+  caja(-104, -96, 198, 202, 0, 11, mMarcoBlanco, null, false);
+  var conoAp = new THREE.Mesh(new THREE.CylinderGeometry(9, 5, 11, 16, 1, true), mPantalla);
+  conoAp.position.set(-100, 192, 9); esc.add(conoAp);
+
+  // ================= la cama =================
+  caja(-BOX_W/2-1.3, BOX_W/2+1.3, Y_FALDON0, Y_TOPE, ZB-1.3, ZB1, mTelaMarco);
+  caja(-BOX_W/2, BOX_W/2, 0, Y_FALDON0, ZB, ZB1, mMaderaMueble);
+  caja(-BOX_W/2, BOX_W/2, Y_TOPE, Y_SOMIER, ZB, ZB1, mTelaMarco);
+  caja(-BOX_W/2+0.5, BOX_W/2-0.5, Y_SOMIER, Y_SOMIER+COLCHON, ZB+0.5, ZB1-0.5, mSabana);
+  caja(-BOX_W/2-1, BOX_W/2+1, Y_SOMIER+COLCHON-1, Y_SOMIER+COLCHON+2.5, ZB+28, ZB1+1, mSabana);
+  caja(-BOX_W/2-1.5, BOX_W/2+1.5, Y_SOMIER+COLCHON+1, Y_SOMIER+COLCHON+6, ZB+96, ZB1+2, mManta);
+  [[-40,0],[40,0],[-40,1],[40,1]].forEach(function(p){
+    var a = new THREE.Mesh(cojin(62, 34, 13, 7), mSabana);
+    a.position.set(p[0], Y_SOMIER + COLCHON + 7 + p[1]*10, ZB + 20 - p[1]*9);
+    a.rotation.x = -0.5 - p[1]*0.25;
+    a.castShadow = true; a.receiveShadow = true; esc.add(a);
+  });
+  [-33, 33].forEach(function(px){
+    var a = new THREE.Mesh(cojin(44, 44, 14, 6), mManta);
+    a.position.set(px, Y_SOMIER + COLCHON + 10, ZB + 34);
+    a.rotation.x = -0.28;
+    a.castShadow = true; a.receiveShadow = true; esc.add(a);
+  });
+
+  caja(-ESP_W/2, ESP_W/2, 0, ESP_H, 0, 2.4, mTelaMarco);
+  caja(-ESP_W/2, -ESP_W/2+2.5, 0, ESP_H, 0, FONDO, mTelaMarco);
+  caja(ESP_W/2-2.5, ESP_W/2, 0, ESP_H, 0, FONDO, mTelaMarco);
+  caja(-ESP_LUZ/2, ESP_LUZ/2, PAT1, ESP_H, 0, FONDO, mTelaMarco);
+  caja(-ESP_LUZ/2, ESP_LUZ/2, 57.5, PAT0, 0, FONDO, mTelaMarco);
+  caja(-ESP_LUZ/2, ESP_LUZ/2, 0, 57.5, 0, FONDO, mTelaMarco);
+  for (var i2 = 0; i2 < N_ESP; i2++){
+    panel(-ESP_LUZ/2 + (i2+0.5)*PASO_E, (PAT0+PAT1)/2, 2.5, PASO_E, PAT1-PAT0, 4.04);
+  }
+  // tomacorrientes del espaldar: a media altura de la mesa de noche, escondidos detrás de ella
+  [-111.5, 111.5].forEach(function(xt){
+    caja(xt-4.5, xt+4.5, 24, 36, FONDO, FONDO+0.8, mToma, null, false);
+    caja(xt-2.7, xt-0.5, 28, 32.5, FONDO+0.8, FONDO+0.95, mHueco, null, false);
+    caja(xt+0.5, xt+2.7, 28, 32.5, FONDO+0.8, FONDO+0.95, mHueco, null, false);
+  });
+
+  caja(-PIE_W/2, PIE_W/2, PIE_PISO, PIE_PISO+PIE_H, ZP, ZP+2.4, mTelaMarco);
+  caja(-PIE_W/2, -PIE_W/2+2.5, PIE_PISO, PIE_PISO+PIE_H, ZP, ZP+FONDO, mTelaMarco);
+  caja(PIE_W/2-2.5, PIE_W/2, PIE_PISO, PIE_PISO+PIE_H, ZP, ZP+FONDO, mTelaMarco);
+  caja(-PIE_LUZ/2, PIE_LUZ/2, PIE_PISO+PIE_H-2.5, PIE_PISO+PIE_H, ZP, ZP+FONDO, mTelaMarco);
+  caja(-PIE_LUZ/2, PIE_LUZ/2, PIE_PISO, PIE_PISO+2.5, ZP, ZP+FONDO, mTelaMarco);
+  for (var j2 = 0; j2 < N_PIE; j2++){
+    panel(-PIE_LUZ/2 + (j2+0.5)*PASO_P, PIE_PISO + PIE_H/2, ZP+2.5, PASO_P, PIE_H-5, 4.04);
+  }
+
+  // ---------- mesas de noche (referenciales) ----------
+  var focos = [], gMesas = new THREE.Group(); esc.add(gMesas);
+  [-1, 1].forEach(function(sg){
+    var cx = sg * 111.5;
+    caja(cx-25, cx+25, 8, 52, FONDO+1, FONDO+41, mMaderaMueble, gMesas);
+    caja(cx-26, cx+26, 52, 55, FONDO, FONDO+42, mMaderaMueble, gMesas);
+    caja(cx-23, cx+23, 20, 21, FONDO+1, FONDO+40, mMaderaMueble, gMesas);
+    caja(cx-23, cx+23, 36, 37, FONDO+1, FONDO+40, mMaderaMueble, gMesas);
+    caja(cx-1.5, cx+1.5, 55, 76, FONDO+19, FONDO+22, mMetal, gMesas);
+    var pant = new THREE.Mesh(new THREE.CylinderGeometry(11, 14, 18, 20, 1, true), mPantalla);
+    pant.position.set(cx, 85, FONDO+20.5); gMesas.add(pant);
+    var foco = new THREE.PointLight(0xffd9a0, 0, 160, 2);
+    foco.position.set(cx, 84, FONDO+20.5); gMesas.add(foco);
+    focos.push(foco);
+  });
+
+  // ---------- luces ----------
+  var hemi = new THREE.HemisphereLight(0xd6e2f4, 0x7a6f60, 0.10); esc.add(hemi);
+  var sol = new THREE.DirectionalLight(0xffeccf, 1.45);  // filtrada por el vidrio esmerilado
+  sol.position.set(560, 310, 540);   // rasante sobre el espaldar: es lo que dibuja los canales
+  sol.castShadow = true;
+  sol.shadow.mapSize.set(2048, 2048);
+  sol.shadow.camera.left = -330; sol.shadow.camera.right = 330;
+  sol.shadow.camera.top = 370; sol.shadow.camera.bottom = -90;
+  sol.shadow.camera.near = 10; sol.shadow.camera.far = 1400;
+  sol.shadow.bias = -0.0012; sol.shadow.normalBias = 0.7;
+  esc.add(sol); esc.add(sol.target);
+  sol.target.position.set(-45, 58, 60);
+  var relleno = new THREE.DirectionalLight(0xcfdcf2, 0.12);
+  relleno.position.set(-280, 200, 420); esc.add(relleno);
+  var plafon = new THREE.PointLight(0xffe6bd, 0, 760, 2);
+  plafon.position.set(0, 250, 190); esc.add(plafon);
+  var apLuz = new THREE.PointLight(0xffd9a0, 0, 180, 2);
+  apLuz.position.set(-100, 186, 14); esc.add(apLuz);
+
+  // ---------- cámara ----------
+  var blanco = new THREE.Vector3(0, 70, 115);
+  var rad = 300, tha = 0, phi = 1.2, libre = false;
+  function radMax(){ return libre ? 1400 : 420; }
+  function sitio(){
+    var x = blanco.x + rad*Math.sin(phi)*Math.sin(tha);
+    var y = blanco.y + rad*Math.cos(phi);
+    var z = blanco.z + rad*Math.sin(phi)*Math.cos(tha);
+    if (!libre){                      // la cámara nunca sale del cuarto
+      x = Math.max(X0 + 12, Math.min(X1 - 12, x));
+      z = Math.max(12, Math.min(CU_L - 12, z));
+      y = Math.max(32, Math.min(H_DER - 20, y));
+    }
+    cam.position.set(x, y, z);
+    cam.lookAt(blanco);
+  }
+  // se sitúa la cámara por posición real dentro del cuarto, no por ángulos a ciegas
+  function vistaDesde(px, py, pz, tx, ty, tz, suelta){
+    libre = !!suelta;
+    techo.visible = !libre;
+    blanco.set(tx, ty, tz);
+    var dx = px - tx, dy = py - ty, dz = pz - tz;
+    rad = Math.sqrt(dx*dx + dy*dy + dz*dz);
+    phi = Math.acos(Math.max(-1, Math.min(1, dy / rad)));
+    tha = Math.atan2(dx, dz);
+    sitio();
+  }
+
+  var lienzo = ren.domElement;
+  lienzo.style.touchAction = 'none';
+  var arr = false, lx = 0, ly = 0;
+  lienzo.addEventListener('pointerdown', function(e){
+    arr = true; lx = e.clientX; ly = e.clientY;
+    try { lienzo.setPointerCapture(e.pointerId); } catch(err){}
+  });
+  lienzo.addEventListener('pointermove', function(e){
+    if (!arr) return;
+    tha -= (e.clientX-lx)*0.0068; phi -= (e.clientY-ly)*0.005;
+    phi = Math.max(0.05, Math.min(2.25, phi));   // pasado 1,57 la vista sube al techo
+    lx = e.clientX; ly = e.clientY; sitio(); pinta();
+  });
+  function suelta(){ arr = false; }
+  lienzo.addEventListener('pointerup', suelta);
+  lienzo.addEventListener('pointercancel', suelta);
+  lienzo.addEventListener('wheel', function(e){
+    rad = Math.max(110, Math.min(radMax(), rad + e.deltaY*0.55)); sitio(); pinta(); e.preventDefault();
+  }, {passive:false});
+  var d0 = null;
+  lienzo.addEventListener('touchstart', function(e){
+    if (e.touches.length === 2) d0 = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+  }, {passive:true});
+  lienzo.addEventListener('touchmove', function(e){
+    if (e.touches.length === 2 && d0){
+      var d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      rad = Math.max(110, Math.min(radMax(), rad*(d0/d))); d0 = d; sitio(); pinta(); e.preventDefault();
+    }
+  }, {passive:false});
+
+  function tam(){
+    var w = stage.clientWidth || 800, h = Math.round(w * 10 / 16);
+    ren.setSize(w, h); cam.aspect = w/h; cam.updateProjectionMatrix();
+  }
+  function pinta(){ ren.render(esc, cam); }
+  function todo(){ tam(); sitio(); pinta(); }
+  window.addEventListener('resize', todo);
+
+  // ---------- controles ----------
+  // posiciones reales de cámara: x, y, z · mirando a x, y, z
+  var vistas = {
+    b1: [-56, 140, 415,   0, 112, 100, false],  // entrando por la puerta
+    b2: [  0, 158, 345,   0, 158,   2, false],  // de frente: pared completa y el techo
+    b3: [ 30, 108, 238,   0, 95,  20, false],   // el espaldar de cerca
+    b4: [  0, 640, 170,   0, 20, 165, true]     // planta, sin techo
+  };
+  ['b1','b2','b3','b4'].forEach(function(id){
+    document.getElementById(id).addEventListener('click', function(){
+      var v = vistas[id];
+      vistaDesde(v[0], v[1], v[2], v[3], v[4], v[5], v[6]);
+      ['b1','b2','b3','b4'].forEach(function(o){
+        document.getElementById(o).setAttribute('aria-pressed', o === id ? 'true' : 'false');
+      });
+      pinta();
+    });
+  });
+  var noche = false;
+  document.getElementById('luz').addEventListener('click', function(){
+    noche = !noche;
+    this.setAttribute('aria-pressed', noche ? 'true' : 'false');
+    this.textContent = noche ? 'Luz de día' : 'Luz de noche';
+    // ojo: esta versión de three usa luces no físicas, así que la intensidad de una
+    // puntual va en el mismo orden que la de una direccional, no en candelas
+    sol.intensity     = noche ? 0.02 : 1.45;
+    relleno.intensity = noche ? 0.02 : 0.12;
+    hemi.intensity    = noche ? 0.05 : 0.10;
+    plafon.intensity  = noche ? 2.2 : 0;
+    apLuz.intensity   = noche ? 1.5 : 0;
+    focos.forEach(function(f){ f.intensity = noche ? 1.8 : 0; });
+    MATS.forEach(function(m){ m.envMapIntensity = noche ? 0.06 : 0.22; });
+    mPantalla.emissive.setHex(noche ? 0xffcf8f : 0x000000);
+    mPantalla.emissiveIntensity = noche ? 1.1 : 0;
+    ren.toneMappingExposure = noche ? 1.05 : 0.72;
+    pinta();
+  });
+  document.getElementById('mn').addEventListener('click', function(){
+    gMesas.visible = !gMesas.visible;
+    this.setAttribute('aria-pressed', gMesas.visible ? 'true' : 'false');
+    pinta();
+  });
+
+  vistaDesde(-56, 140, 415, 0, 112, 100, false);
+  todo();
+})();
+</script>
+</body>
+</html>
