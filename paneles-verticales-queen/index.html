@@ -171,7 +171,7 @@ ul.lista b{font-weight:600}
   var BALDOSA = 31;
   var Y_TOMA = 50, Y_ALFEIZAR = 80;
 
-  var SEP = 0.5;               // separación visible entre panel y panel
+  var SEP = 1.0;               // separación visible entre panel y panel
   var ESP_W = 277, ESP_LUZ = 272, ESP_H = 132.5;
   var N_ESP = 20, PASO_E = ESP_LUZ / N_ESP, W_E = PASO_E - 0.4;
   var PAT0 = 60, PAT1 = 130;
@@ -298,10 +298,12 @@ ul.lista b{font-weight:600}
     emissive:0x000000, side:THREE.DoubleSide});
   var mToma = new THREE.MeshStandardMaterial({color:0xeae6de, roughness:0.5});
   var mHueco = new THREE.MeshStandardMaterial({color:0x33312e, roughness:0.85});
+  // fondo de la ranura entre paneles: a 4 cm de profundidad siempre está en sombra
+  var mRanura = new THREE.MeshStandardMaterial({color:0x2b2419, roughness:1.0});
   // el rebote del entorno es lo que aplanaba todo: se baja fuerte para que mande la luz direccional
   var MATS = [mTela, mTelaMarco, mSabana, mManta, mPiso, mPared, mRodapie, mViga, mTabla,
-   mPuerta, mMarcoBlanco, mMaderaMueble, mToma, mHueco];
-  MATS.forEach(function(m){ m.envMapIntensity = 0.22; });
+   mPuerta, mMarcoBlanco, mMaderaMueble, mToma, mHueco, mRanura];
+  MATS.forEach(function(m){ m.envMapIntensity = 0.15; });
   mMetal.envMapIntensity = 0.85;
   mVidrio.envMapIntensity = 0.9;
   mVidrioAzul.envMapIntensity = 0.7;
@@ -323,7 +325,7 @@ ul.lista b{font-weight:600}
     s.lineTo(x+r, y+h); s.quadraticCurveTo(x, y+h, x, y+h-r);
     s.lineTo(x, y+r); s.quadraticCurveTo(x, y, x+r, y);
     var g = new THREE.ExtrudeGeometry(s, {depth:prof, bevelEnabled:true,
-      bevelSize:1.45, bevelThickness:1.35, bevelSegments:4, curveSegments:4});
+      bevelSize:1.9, bevelThickness:1.6, bevelSegments:4, curveSegments:4});
     g.computeVertexNormals();
     return g;
   }
@@ -435,6 +437,7 @@ ul.lista b{font-weight:600}
   caja(-ESP_LUZ/2, ESP_LUZ/2, PAT1, ESP_H, 0, FONDO, mTelaMarco);
   caja(-ESP_LUZ/2, ESP_LUZ/2, 57.5, PAT0, 0, FONDO, mTelaMarco);
   caja(-ESP_LUZ/2, ESP_LUZ/2, 0, 57.5, 0, FONDO, mTelaMarco);
+  caja(-ESP_LUZ/2, ESP_LUZ/2, PAT0, PAT1, 2.35, 2.5, mRanura, null, false);
   for (var i2 = 0; i2 < N_ESP; i2++){
     panel(-ESP_LUZ/2 + (i2+0.5)*PASO_E, (PAT0+PAT1)/2, 2.5, PASO_E - SEP, PAT1-PAT0, 4.04);
   }
@@ -450,6 +453,7 @@ ul.lista b{font-weight:600}
   caja(PIE_W/2-2.5, PIE_W/2, PIE_PISO, PIE_PISO+PIE_H, ZP, ZP+FONDO, mTelaMarco);
   caja(-PIE_LUZ/2, PIE_LUZ/2, PIE_PISO+PIE_H-2.5, PIE_PISO+PIE_H, ZP, ZP+FONDO, mTelaMarco);
   caja(-PIE_LUZ/2, PIE_LUZ/2, PIE_PISO, PIE_PISO+2.5, ZP, ZP+FONDO, mTelaMarco);
+  caja(-PIE_LUZ/2, PIE_LUZ/2, PIE_PISO+2.5, PIE_PISO+PIE_H-2.5, ZP+2.35, ZP+2.5, mRanura, null, false);
   for (var j2 = 0; j2 < N_PIE; j2++){
     panel(-PIE_LUZ/2 + (j2+0.5)*PASO_P, PIE_PISO + PIE_H/2, ZP+2.5, PASO_P - SEP, PIE_H-5, 4.04);
   }
@@ -471,8 +475,8 @@ ul.lista b{font-weight:600}
   });
 
   // ---------- luces ----------
-  var hemi = new THREE.HemisphereLight(0xd6e2f4, 0x7a6f60, 0.10); esc.add(hemi);
-  var sol = new THREE.DirectionalLight(0xffeccf, 1.45);  // filtrada por el vidrio esmerilado
+  var hemi = new THREE.HemisphereLight(0xd6e2f4, 0x7a6f60, 0.07); esc.add(hemi);
+  var sol = new THREE.DirectionalLight(0xffeccf, 1.85);  // filtrada por el vidrio esmerilado
   sol.position.set(560, 310, 540);   // rasante sobre el espaldar: es lo que dibuja los paneles
   sol.castShadow = true;
   sol.shadow.mapSize.set(2048, 2048);
@@ -580,13 +584,13 @@ ul.lista b{font-weight:600}
     this.textContent = noche ? 'Luz de día' : 'Luz de noche';
     // ojo: esta versión de three usa luces no físicas, así que la intensidad de una
     // puntual va en el mismo orden que la de una direccional, no en candelas
-    sol.intensity     = noche ? 0.02 : 1.45;
+    sol.intensity     = noche ? 0.02 : 1.85;
     relleno.intensity = noche ? 0.02 : 0.12;
-    hemi.intensity    = noche ? 0.05 : 0.10;
+    hemi.intensity    = noche ? 0.05 : 0.07;
     plafon.intensity  = noche ? 2.2 : 0;
     apLuz.intensity   = noche ? 1.5 : 0;
     focos.forEach(function(f){ f.intensity = noche ? 1.8 : 0; });
-    MATS.forEach(function(m){ m.envMapIntensity = noche ? 0.06 : 0.22; });
+    MATS.forEach(function(m){ m.envMapIntensity = noche ? 0.05 : 0.15; });
     mPantalla.emissive.setHex(noche ? 0xffcf8f : 0x000000);
     mPantalla.emissiveIntensity = noche ? 1.1 : 0;
     ren.toneMappingExposure = noche ? 1.05 : 0.72;

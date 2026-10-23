@@ -11,7 +11,7 @@ datos ni instalación: se abre en cualquier navegador.
 | Carpeta | Qué es |
 |---|---|
 | `nube-king/` | Cama Nube, tamaño king. El cliente elige cantidad de figuras y tono de tela y la ve en 3D. |
-| `canales-queen/` | Cama queen de paneles verticales, espaldar de pared a pared. La habitación del cliente levantada a escala desde las medidas de sitio. |
+| `paneles-verticales-queen/` | Cama queen de paneles verticales, espaldar de pared a pared. La habitación del cliente levantada a escala desde las medidas de sitio. |
 | `pedido/` | Ficha de pedido. El cliente carga fotos y medidas; la página arma un mensaje de WhatsApp y una ficha `.json`. |
 
 ## Formato de los pedidos
