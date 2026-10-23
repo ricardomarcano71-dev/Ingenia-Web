@@ -42,6 +42,12 @@ h1{font-family:var(--f-tit);font-weight:700;font-size:clamp(22px,5vw,30px);margi
 h2{font-family:var(--f-tit);font-weight:700;font-size:18px;margin:0;letter-spacing:-.01em}
 .sub{color:var(--grafito);margin:0;max-width:62ch}
 #stage{position:relative;width:100%;aspect-ratio:16/10;background:#EAE8E3;border:1px solid var(--linea);overflow:hidden}
+@media (max-width:620px){
+  /* en el teléfono el render va de borde a borde y en vertical, que es como se mira */
+  #stage{aspect-ratio:3/4;max-height:72vh;width:auto;border-left:0;border-right:0;
+    margin-left:calc(-1 * max(16px, env(safe-area-inset-left,0px)));
+    margin-right:calc(-1 * max(16px, env(safe-area-inset-right,0px)))}
+}
 #stage canvas{display:block;width:100%;height:100%}
 #fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
   padding:24px;text-align:center;color:#5d646d;font-size:14px}
@@ -551,9 +557,16 @@ ul.lista b{font-weight:600}
     }
   }, {passive:false});
 
+  // el encuadre horizontal se mantiene fijo: en una pantalla alta crece lo que se ve
+  // de piso y techo, en vez de recortarse la pared a los lados
+  var TAN_H = Math.tan(55/2 * Math.PI/180) * 1.6;
   function tam(){
-    var w = stage.clientWidth || 800, h = Math.round(w * 10 / 16);
-    ren.setSize(w, h); cam.aspect = w/h; cam.updateProjectionMatrix();
+    var w = stage.clientWidth || 800;
+    var h = stage.clientHeight || Math.round(w * 10 / 16);
+    ren.setSize(w, h);
+    cam.aspect = w / h;
+    cam.fov = Math.max(42, Math.min(72, 2 * Math.atan(TAN_H / cam.aspect) * 180 / Math.PI));
+    cam.updateProjectionMatrix();
   }
   function pinta(){ ren.render(esc, cam); }
   function todo(){ tam(); sitio(); pinta(); }
