@@ -61,6 +61,8 @@ button{font-family:var(--f-txt);font-size:14px;padding:8px 13px;background:var(-
 button:hover{border-color:var(--grafito)}
 button[aria-pressed="true"]{background:var(--sel);color:var(--selfg);border-color:var(--sel)}
 button:focus-visible{outline:2px solid var(--azul);outline-offset:2px}
+.sw{width:36px;height:30px;padding:0;border-radius:6px}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--superficie),0 0 0 4px var(--sel)}
 .cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;
   background:var(--linea);border:1px solid var(--linea)}
 .cifra{background:var(--superficie);padding:10px 12px;min-width:0}
@@ -111,6 +113,17 @@ ul.lista b{font-weight:600}
     <span class="lbl">Escena</span>
     <button type="button" id="luz" aria-pressed="false">Luz de noche</button>
     <button type="button" id="mn" aria-pressed="true">Mesas de noche</button>
+  </div>
+
+  <div class="row" role="group" aria-label="Tono de la tela">
+    <span class="lbl">Tono de la tela</span>
+    <button type="button" class="sw" id="t0" aria-pressed="false" aria-label="Crema" style="background:#E6DCC8"></button>
+    <button type="button" class="sw" id="t1" aria-pressed="false" aria-label="Arena" style="background:#D4C5A8"></button>
+    <button type="button" class="sw" id="t2" aria-pressed="false" aria-label="Lino" style="background:#BCAA8B"></button>
+    <button type="button" class="sw" id="t3" aria-pressed="false" aria-label="Tostado" style="background:#A28E6D"></button>
+    <button type="button" class="sw" id="t4" aria-pressed="true" aria-label="Beige oscuro" style="background:#857253"></button>
+    <button type="button" class="sw" id="t5" aria-pressed="false" aria-label="Café" style="background:#6A583D"></button>
+    <button type="button" class="sw" id="t6" aria-pressed="false" aria-label="Café oscuro" style="background:#50412C"></button>
   </div>
 
   <div class="cifras">
@@ -305,11 +318,12 @@ ul.lista b{font-weight:600}
   var mToma = new THREE.MeshStandardMaterial({color:0xeae6de, roughness:0.5});
   var mHueco = new THREE.MeshStandardMaterial({color:0x33312e, roughness:0.85});
   // fondo de la ranura entre paneles: a 4 cm de profundidad siempre está en sombra
-  var mRanura = new THREE.MeshStandardMaterial({color:0x2b2419, roughness:1.0});
+  var mRanura = new THREE.MeshStandardMaterial({color:0x120f0a, roughness:1.0});
   // el rebote del entorno es lo que aplanaba todo: se baja fuerte para que mande la luz direccional
   var MATS = [mTela, mTelaMarco, mSabana, mManta, mPiso, mPared, mRodapie, mViga, mTabla,
-   mPuerta, mMarcoBlanco, mMaderaMueble, mToma, mHueco, mRanura];
+   mPuerta, mMarcoBlanco, mMaderaMueble, mToma, mHueco];
   MATS.forEach(function(m){ m.envMapIntensity = 0.15; });
+  mRanura.envMapIntensity = 0.02;   // fuera del grupo: la ranura no debe aclararse nunca
   mMetal.envMapIntensity = 0.85;
   mVidrio.envMapIntensity = 0.9;
   mVidrioAzul.envMapIntensity = 0.7;
@@ -614,6 +628,23 @@ ul.lista b{font-weight:600}
     this.setAttribute('aria-pressed', gMesas.visible ? 'true' : 'false');
     pinta();
   });
+
+  // ---------- tono del tapizado ----------
+  var TONOS = [0xE6DCC8, 0xD4C5A8, 0xBCAA8B, 0xA28E6D, 0x857253, 0x6A583D, 0x50412C];
+  function tono(i){
+    mTela.color.setHex(TONOS[i]);
+    mTelaMarco.color.setHex(TONOS[i]).multiplyScalar(0.86);
+    for (var k = 0; k < TONOS.length; k++){
+      document.getElementById('t'+k).setAttribute('aria-pressed', k === i ? 'true' : 'false');
+    }
+    pinta();
+  }
+  for (var k2 = 0; k2 < TONOS.length; k2++){
+    (function(k){
+      document.getElementById('t'+k).addEventListener('click', function(){ tono(k); });
+    })(k2);
+  }
+  tono(4);
 
   vistaDesde(-56, 140, 415, 0, 112, 100, false);
   todo();
