@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Cama queen de canales verticales con espaldar de pared a pared, vista en 3D dentro de la habitación a escala real. Ingenia Mobiliario.">
+<meta name="description" content="Cama queen de paneles verticales con espaldar de pared a pared, vista en 3D dentro de la habitación a escala real. Ingenia Mobiliario.">
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<title>Cama de canales · Queen · Ingenia Mobiliario</title>
+<title>Cama de paneles verticales · Queen · Ingenia Mobiliario</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Source+Sans+3:wght@400;600&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
 <style>
@@ -84,7 +84,7 @@ ul.lista b{font-weight:600}
 
   <div>
     <div class="marca">Ingenia Mobiliario · carpintería y tapicería a medida</div>
-    <h1>Cama queen de canales verticales, en su habitación</h1>
+    <h1>Cama queen de paneles verticales, en su habitación</h1>
     <p class="sub">Espaldar tapizado de pared a pared sobre los 279 cm medidos, piecero a juego y box sobre estructura reforzada. El cuarto está levantado con las medidas reales tomadas en sitio: cerámica de 31, techo de vigas inclinado y la división del clóset a 3,58 m. Arrastra para girar, rueda o pellizca para acercar.</p>
   </div>
 
@@ -109,7 +109,7 @@ ul.lista b{font-weight:600}
 
   <div class="cifras">
     <div class="cifra"><div class="k">Espaldar</div><div class="v">277</div><div class="u">cm, pared a pared</div></div>
-    <div class="cifra"><div class="k">Altura</div><div class="v">132,5</div><div class="u">cm · 20 canales</div></div>
+    <div class="cifra"><div class="k">Altura</div><div class="v">132,5</div><div class="u">cm · 20 paneles</div></div>
     <div class="cifra"><div class="k">Colchón</div><div class="v">160 × 190</div><div class="u">queen, encaje justo</div></div>
     <div class="cifra"><div class="k">Paso lateral</div><div class="v">55</div><div class="u">cm libres a cada lado</div></div>
     <div class="cifra"><div class="k">Al pie</div><div class="v">149</div><div class="u">cm hasta el clóset</div></div>
@@ -121,10 +121,10 @@ ul.lista b{font-weight:600}
   <div class="bloque">
     <h2>Qué incluye</h2>
     <ul class="lista">
-      <li><b>Espaldar de 277 × 132,5 cm</b> con 20 canales verticales tapizados, montado de pared a pared. Las mesas de noche quedan contra él, no contra la pared.</li>
+      <li><b>Espaldar de 277 × 132,5 cm</b> con 20 paneles verticales tapizados, montado de pared a pared. Las mesas de noche quedan contra él, no contra la pared.</li>
       <li><b>Box queen</b> sobre estructura de madera con soportes centrales y seis patas, somier completo y faldón tapizado en los tres lados a la vista.</li>
-      <li><b>Piecero a juego</b> de 12 canales, por debajo del nivel del colchón para no estorbar al acostarse.</li>
-      <li><b>Tapizado sin costuras a la vista</b> en los canales, con los cantos del marco forrados.</li>
+      <li><b>Piecero a juego</b> de 12 paneles, por debajo del nivel del colchón para no estorbar al acostarse.</li>
+      <li><b>Tapizado sin costuras a la vista</b> en cada panel, con los cantos del marco forrados.</li>
     </ul>
   </div>
 
@@ -134,8 +134,8 @@ ul.lista b{font-weight:600}
       <p>Marco de madera maciza con faldones de doble alfajía y tacos, dos soportes centrales corridos y seis patas que suben hasta el tope del marco. Nada de aglomerado cargando peso.</p>
     </div>
     <div class="col">
-      <h3>Los canales</h3>
-      <p>Cada canal es una pieza independiente: panel rígido, goma espuma de una pulgada y la tela templada y grapada por detrás. Se atornillan uno a uno al marco ya armado.</p>
+      <h3>Los paneles</h3>
+      <p>Cada panel es una pieza independiente: tablero rígido, goma espuma de una pulgada y la tela templada y grapada por detrás. Se atornillan uno a uno al marco ya armado, dejando entre ellos la línea que marca el diseño.</p>
     </div>
     <div class="col">
       <h3>Acabado</h3>
@@ -171,6 +171,7 @@ ul.lista b{font-weight:600}
   var BALDOSA = 31;
   var Y_TOMA = 50, Y_ALFEIZAR = 80;
 
+  var SEP = 0.5;               // separación visible entre panel y panel
   var ESP_W = 277, ESP_LUZ = 272, ESP_H = 132.5;
   var N_ESP = 20, PASO_E = ESP_LUZ / N_ESP, W_E = PASO_E - 0.4;
   var PAT0 = 60, PAT1 = 130;
@@ -390,11 +391,13 @@ ul.lista b{font-weight:600}
   var yMedio = (H_IZQ + H_DER) / 2;
   var tablas = new THREE.Mesh(new THREE.BoxGeometry(LV + 18, 5, CU_L + 18), mTabla);
   tablas.position.set(0, yMedio + 22, (CU_L - 9)/2);
-  tablas.rotation.z = incl; tablas.receiveShadow = true; techo.add(tablas);
+  tablas.rotation.z = incl; tablas.receiveShadow = true; tablas.castShadow = false;
+  techo.add(tablas);
   for (var v = 0; v <= 11; v++){
     var viga = new THREE.Mesh(new THREE.BoxGeometry(LV + 14, 14, 9), mViga);
     viga.position.set(0, yMedio + 12, -4 + v * (CU_L + 8) / 11);
-    viga.rotation.z = incl; viga.castShadow = true; viga.receiveShadow = true;
+    // el techo NO proyecta: el sol no lo atraviesa de verdad, la luz entra por la ventana
+    viga.rotation.z = incl; viga.castShadow = false; viga.receiveShadow = true;
     techo.add(viga);
   }
 
@@ -433,7 +436,7 @@ ul.lista b{font-weight:600}
   caja(-ESP_LUZ/2, ESP_LUZ/2, 57.5, PAT0, 0, FONDO, mTelaMarco);
   caja(-ESP_LUZ/2, ESP_LUZ/2, 0, 57.5, 0, FONDO, mTelaMarco);
   for (var i2 = 0; i2 < N_ESP; i2++){
-    panel(-ESP_LUZ/2 + (i2+0.5)*PASO_E, (PAT0+PAT1)/2, 2.5, PASO_E, PAT1-PAT0, 4.04);
+    panel(-ESP_LUZ/2 + (i2+0.5)*PASO_E, (PAT0+PAT1)/2, 2.5, PASO_E - SEP, PAT1-PAT0, 4.04);
   }
   // tomacorrientes del espaldar: a media altura de la mesa de noche, escondidos detrás de ella
   [-111.5, 111.5].forEach(function(xt){
@@ -448,7 +451,7 @@ ul.lista b{font-weight:600}
   caja(-PIE_LUZ/2, PIE_LUZ/2, PIE_PISO+PIE_H-2.5, PIE_PISO+PIE_H, ZP, ZP+FONDO, mTelaMarco);
   caja(-PIE_LUZ/2, PIE_LUZ/2, PIE_PISO, PIE_PISO+2.5, ZP, ZP+FONDO, mTelaMarco);
   for (var j2 = 0; j2 < N_PIE; j2++){
-    panel(-PIE_LUZ/2 + (j2+0.5)*PASO_P, PIE_PISO + PIE_H/2, ZP+2.5, PASO_P, PIE_H-5, 4.04);
+    panel(-PIE_LUZ/2 + (j2+0.5)*PASO_P, PIE_PISO + PIE_H/2, ZP+2.5, PASO_P - SEP, PIE_H-5, 4.04);
   }
 
   // ---------- mesas de noche (referenciales) ----------
@@ -470,7 +473,7 @@ ul.lista b{font-weight:600}
   // ---------- luces ----------
   var hemi = new THREE.HemisphereLight(0xd6e2f4, 0x7a6f60, 0.10); esc.add(hemi);
   var sol = new THREE.DirectionalLight(0xffeccf, 1.45);  // filtrada por el vidrio esmerilado
-  sol.position.set(560, 310, 540);   // rasante sobre el espaldar: es lo que dibuja los canales
+  sol.position.set(560, 310, 540);   // rasante sobre el espaldar: es lo que dibuja los paneles
   sol.castShadow = true;
   sol.shadow.mapSize.set(2048, 2048);
   sol.shadow.camera.left = -330; sol.shadow.camera.right = 330;
