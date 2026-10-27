@@ -12,6 +12,7 @@ datos ni instalación: se abre en cualquier navegador.
 |---|---|
 | `nube-king/` | Cama Nube, tamaño king. El cliente elige cantidad de figuras y tono de tela y la ve en 3D. |
 | `paneles-verticales-queen/` | Cama queen de paneles verticales, espaldar de pared a pared. La habitación del cliente levantada a escala desde las medidas de sitio. |
+| `cuidado-terciopelo/` | Cuidado y limpieza de la tela terciopelo Holanda, para entregar al cliente. |
 | `pedido/` | Ficha de pedido. El cliente carga fotos y medidas; la página arma un mensaje de WhatsApp y una ficha `.json`. |
 
 ## Formato de los pedidos
