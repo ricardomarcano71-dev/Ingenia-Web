@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Pared del televisor en mármol blanco con wall panel, vista en 3D dentro de su propia sala. Ingenia Mobiliario.">
+<title>Pared del televisor en mármol · Ingenia Mobiliario</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+<style>
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0}
+img,svg{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+/* Banda azul de marca arriba y abajo, visor a todo el ancho, ficha sobria debajo */
+:root{
+  --azul:#0B1F3A; --blanco:#FFFFFF; --apoyo:#6C7C92;
+  --fondo:#FFFFFF; --texto:#0B1F3A; --suave:#5A6B80; --borde:#DDE2E8; --caja:#F7F8FA; --sel:#0B1F3A; --deco:#0B1F3A; --tinte:#F0F3F8; --hilo:rgba(11,31,58,.05); --azul2:#6C7C92;
+  color-scheme:light;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+body{background:var(--fondo);color:var(--texto);font-family:var(--f);font-size:16px;line-height:1.6;font-weight:400}
+.inner{max-width:920px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:linear-gradient(104deg,#0B1F3A 0%,#0B1F3A 44%,#13294A 62%,#2C4260 80%,#53637B 94%,var(--azul2) 100%);overflow:hidden}
+header .inner{padding-block:24px 26px;display:flex;align-items:center;gap:18px}
+.hrow{display:flex;align-items:center;gap:18px;flex:1;min-width:0}
+.marca{height:clamp(54px,12vw,82px);width:auto;display:block;flex:none}
+.deco{flex:1;min-width:0;display:flex;justify-content:flex-end;align-items:flex-end;color:#FFFFFF;padding-bottom:4px}
+.deco svg{width:100%;max-width:300px;height:auto;display:block}
+.intro .inner{padding-block:28px 6px;display:flex;flex-direction:column;gap:7px}
+.tit{display:flex;flex-direction:column;gap:6px}
+h1{font-size:clamp(26px,6vw,38px);font-weight:500;letter-spacing:-.01em;margin:0;color:var(--texto);text-wrap:balance}
+.baja{margin:0;color:var(--suave);font-size:15px;font-weight:300;max-width:56ch}
+main{max-width:920px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:26px 34px;display:flex;flex-direction:column;gap:24px}
+.tintband{background:var(--tinte);width:100%;position:relative;overflow:hidden;border-block:1px solid var(--borde)}
+.tintband::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--hilo) 0 1px,transparent 1px 30px);pointer-events:none}
+.tintband .inner{position:relative;padding-block:24px}
+.mat{background:#FFFFFF;border:1px solid var(--borde);padding:10px}
+#stage{position:relative;width:100%;aspect-ratio:16/10;background:#EAE8E3;overflow:hidden}
+#stage canvas{display:block;width:100%;height:100%}
+#fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;color:#5A6B80;font-size:14px}
+.hint{position:absolute;left:12px;bottom:9px;font-size:11px;color:#7A736A;letter-spacing:.05em;pointer-events:none}
+section{display:flex;flex-direction:column;gap:10px}
+h2{font-size:13px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--suave);margin:0;display:flex;align-items:center;gap:9px}
+h2::before{content:"";width:3px;height:13px;background:var(--azul);flex:none}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+button{font-family:var(--f);font-size:14px;font-weight:400;padding:9px 15px;background:transparent;color:var(--texto);border:1px solid var(--borde);cursor:pointer;min-width:0;line-height:1.3}
+button:hover{border-color:var(--apoyo)}
+button[aria-pressed="true"]{background:var(--sel);color:var(--blanco);border-color:var(--sel);font-weight:500}
+button:focus-visible{outline:2px solid var(--apoyo);outline-offset:2px}
+.sw{width:40px;height:34px;padding:0;border:1px solid var(--borde)}
+.sw[aria-pressed="true"]{border:2px solid var(--azul)}
+.desc{font-size:15px;color:var(--suave);min-height:3em}
+.desc b{color:var(--texto);font-weight:500}
+.ficha{border:1px solid var(--borde);background:#FFFFFF}
+.ficha dl{margin:0;display:grid;grid-template-columns:1fr;gap:1px;background:var(--borde)}
+@media(min-width:520px){.ficha dl{grid-template-columns:1fr 1fr}}
+.ficha .it{background:#FFFFFF;padding:12px 15px;display:flex;justify-content:space-between;gap:14px;align-items:baseline;min-width:0}
+.ficha dt{font-size:14px;color:var(--suave);font-weight:400}
+.ficha dd{margin:0;font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.closer{width:100%;background:var(--fondo);overflow:hidden}
+.closer .inner{padding-block:16px 0;display:flex;justify-content:flex-start}
+.closer svg{width:100%;max-width:320px;height:auto;display:block;color:var(--azul)}
+footer{border-top:1px solid var(--borde);background:var(--tinte);position:relative;overflow:hidden}
+footer::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--hilo) 0 1px,transparent 1px 30px);pointer-events:none}
+footer .inner{position:relative}
+footer .inner{padding-block:20px;display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+footer .ico{height:34px;width:auto;display:block}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pie{color:var(--suave);font-size:13px;font-weight:300;margin:0}
+.pie strong{color:var(--texto);font-weight:500;display:block;font-size:14px;letter-spacing:.03em}
+</style>
+
+<style>
+/* lo único que se agrega al sistema: el visor a pantalla completa en el teléfono */
+@media (max-width:620px){
+  .tintband .inner{padding-left:0;padding-right:0}
+  .mat{border-left:0;border-right:0;padding:0}
+  #stage{aspect-ratio:3/4;max-height:72vh}
+}
+</style>
+
+<header>
+  <div class="inner">
+    <div class="hrow">
+      <svg class="marca" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 724 230">
+  <rect width="724" height="230" fill="#0B1F3A"/>
+  <g fill="#FFFFFF">
+    <path d="M393 1490H165V0H393Z" transform="translate(60.00 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M165 0H396V795C396 872 388 1026 379 1213C487 1013 544 910 617 793L1120 0H1384V1490H1153V642C1153 556 1157 417 1168 273C1102 416 1035 529 989 603L428 1490H165Z" transform="translate(119.25 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M791 -20C1152 -20 1413 216 1413 593V764H825V576H1190C1185 338 1028 188 792 188C529 188 339 386 339 745C339 1105 532 1302 783 1302C979 1302 1112 1193 1166 1019H1400C1350 1309 1102 1510 781 1510C395 1510 113 1220 113 744C113 273 386 -20 791 -20Z" transform="translate(226.88 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M165 0H1109V196H393V655H1053V850H393V1294H1103V1490H165Z" transform="translate(333.64 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M165 0H396V795C396 872 388 1026 379 1213C487 1013 544 910 617 793L1120 0H1384V1490H1153V642C1153 556 1157 417 1168 273C1102 416 1035 529 989 603L428 1490H165Z" transform="translate(425.94 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M393 1490H165V0H393Z" transform="translate(533.57 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M51 0H298L431 393H1017L1154 0H1401L861 1490H581ZM496 583 579 829C616 943 662 1098 720 1311C779 1100 824 948 864 829L950 583Z" transform="translate(592.82 110.00) scale(0.04883 -0.04883)"/>
+    <path d="M197 0H333V946C333 1054 330 1206 328 1333C381 1182 433 1034 469 946L859 0H984L1371 946C1407 1036 1462 1187 1511 1334C1509 1199 1507 1051 1507 946V0H1647V1490H1445L1032 468C1001 391 958 262 923 156C889 265 845 393 815 468L399 1490H197Z" transform="translate(157.33 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M778 -20C1155 -20 1423 278 1423 744C1423 1211 1155 1510 778 1510C401 1510 131 1211 131 744C131 278 400 -20 778 -20ZM778 113C485 113 269 349 269 744C269 1142 487 1377 778 1377C1068 1377 1285 1142 1285 744C1285 348 1068 113 778 113Z" transform="translate(210.44 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M197 0H732C1051 0 1200 165 1200 392C1200 617 1046 753 904 763V775C1039 810 1142 915 1142 1101C1142 1324 995 1490 704 1490H197ZM339 127V695H735C933 695 1063 561 1063 393C1063 240 956 127 729 127ZM339 817V1363H701C902 1363 1005 1254 1005 1098C1005 936 888 817 714 817Z" transform="translate(259.45 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M339 1490H197V0H339Z" transform="translate(305.28 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M197 0H1048V127H340V1490H197Z" transform="translate(339.88 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M339 1490H197V0H339Z" transform="translate(383.25 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M57 0H208L366 443H1011L1172 0H1322L771 1490H603ZM411 569 556 974C589 1068 632 1196 686 1375C740 1198 782 1073 818 974L965 569Z" transform="translate(417.86 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M197 0H339V599H684C703 599 721 600 739 601L1062 0H1226L884 629C1068 690 1164 842 1164 1041C1164 1304 998 1490 683 1490H197ZM339 727V1363H677C909 1363 1023 1236 1023 1041C1023 849 909 727 678 727Z" transform="translate(464.38 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M339 1490H197V0H339Z" transform="translate(509.78 190.00) scale(0.01416 -0.01416)"/>
+    <path d="M778 -20C1155 -20 1423 278 1423 744C1423 1211 1155 1510 778 1510C401 1510 131 1211 131 744C131 278 400 -20 778 -20ZM778 113C485 113 269 349 269 744C269 1142 487 1377 778 1377C1068 1377 1285 1142 1285 744C1285 348 1068 113 778 113Z" transform="translate(544.38 190.00) scale(0.01416 -0.01416)"/>
+  </g>
+  <rect x="58.00" y="71.48" width="31.25" height="5.04" fill="#0B1F3A"/>
+</svg>
+      <span class="sr">Ingenia Mobiliario</span>
+      <div class="deco" aria-hidden="true">
+        <svg viewBox="0 0 307 26" fill="currentColor" preserveAspectRatio="xMaxYMid meet">
+          <rect x="0" y="0" width="22" height="26" rx="11" opacity="0.055"/>
+          <rect x="4.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.116"/>
+          <rect x="29" y="0" width="22" height="26" rx="11" opacity="0.067"/>
+          <rect x="33.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.141"/>
+          <rect x="58" y="0" width="13" height="26" rx="6.5" opacity="0.079"/>
+          <rect x="60.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.166"/>
+          <rect x="78" y="0" width="13" height="26" rx="6.5" opacity="0.091"/>
+          <rect x="80.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.192"/>
+          <rect x="98" y="0" width="13" height="26" rx="6.5" opacity="0.103"/>
+          <rect x="100.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.217"/>
+          <rect x="118" y="0" width="22" height="26" rx="11" opacity="0.115"/>
+          <rect x="122.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.242"/>
+          <rect x="147" y="0" width="22" height="26" rx="11" opacity="0.128"/>
+          <rect x="151.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.268"/>
+          <rect x="176" y="0" width="13" height="26" rx="6.5" opacity="0.140"/>
+          <rect x="178.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.293"/>
+          <rect x="196" y="0" width="13" height="26" rx="6.5" opacity="0.152"/>
+          <rect x="198.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.318"/>
+          <rect x="216" y="0" width="13" height="26" rx="6.5" opacity="0.164"/>
+          <rect x="218.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.344"/>
+          <rect x="236" y="0" width="22" height="26" rx="11" opacity="0.176"/>
+          <rect x="240.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.369"/>
+          <rect x="265" y="0" width="22" height="26" rx="11" opacity="0.188"/>
+          <rect x="269.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.395"/>
+          <rect x="294" y="0" width="13" height="26" rx="6.5" opacity="0.200"/>
+          <rect x="296.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.420"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="intro">
+  <div class="inner">
+      <h1>Pared del televisor en mármol</h1>
+      <p class="baja">Su sala con la pared del televisor ya remodelada: láminas tipo mármol blanco de piso a techo, wall panel en los extremos y el televisor centrado. Gírela, véala de día y de noche y pruebe las vetas y los tonos antes de que entre a taller.</p>
+  </div>
+</div>
+
+<div class="tintband">
+  <div class="inner">
+    <div class="mat">
+      <div id="stage">
+        <div id="fallback">No se pudo cargar la vista 3D en este dispositivo. Las medidas de abajo siguen siendo válidas.</div>
+        <div class="hint">arrastre para girar · pellizque para acercar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section>
+    <h2>Vista</h2>
+    <div class="opts" role="group" aria-label="Vista">
+      <button type="button" id="b1" aria-pressed="true">De frente</button>
+      <button type="button" id="b2" aria-pressed="false">Desde el sofá</button>
+      <button type="button" id="b3" aria-pressed="false">Desde la cortina</button>
+      <button type="button" id="b4" aria-pressed="false">El wall panel de cerca</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ambiente</h2>
+    <div class="opts" role="group" aria-label="Ambiente">
+      <button type="button" id="luz" aria-pressed="false">Luz de noche</button>
+      <button type="button" id="mu" aria-pressed="true">Mueble flotante</button>
+      <button type="button" id="pf" aria-pressed="true">Perfiles dorados</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Vetas del mármol</h2>
+    <div class="opts" role="group" aria-label="Vetas del mármol">
+      <button type="button" id="v0" aria-pressed="true">Hilos dorados</button>
+      <button type="button" id="v1" aria-pressed="false">Hilos grises</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tono del wall panel</h2>
+    <div class="opts" role="group" aria-label="Tono del wall panel">
+      <button type="button" class="sw" id="t0" aria-pressed="true" aria-label="Roble" style="background:#A77B4F"></button>
+      <button type="button" class="sw" id="t1" aria-pressed="false" aria-label="Nogal" style="background:#6B4A30"></button>
+      <button type="button" class="sw" id="t2" aria-pressed="false" aria-label="Gris" style="background:#9A958C"></button>
+      <button type="button" class="sw" id="t3" aria-pressed="false" aria-label="Negro" style="background:#1E1D1B"></button>
+    </div>
+    <p class="desc" style="min-height:0">Con hilos dorados lucen mejor el roble, el nogal o el negro. Con hilos grises, el gris o el negro.</p>
+  </section>
+
+  <section>
+    <h2>Qué lleva</h2>
+    <p class="desc" style="min-height:0">La pared completa forrada en <b>láminas tipo mármol blanco</b>, de piso a techo, con <b>perfiles dorados</b> en las juntas. Una tira de <b>wall panel acanalado</b> en cada extremo, contra la cortina y contra el mesón. El <b>televisor</b> centrado en la pared y, debajo, un <b>mueble flotante</b> para el equipo de sonido. La repisa, el router y los cables que hoy están a la vista se quitan.</p>
+  </section>
+
+  <section>
+    <h2>Cómo está hecha</h2>
+    <p class="desc" style="min-height:0">Cada lámina va <b>entera de arriba abajo</b>, sin juntas horizontales, y se corta siguiendo la caída del techo. La lámina del centro queda justo detrás del televisor, así que sus dos juntas se esconden detrás de la pantalla y, por encima y por debajo, se leen como dos líneas doradas que enmarcan una columna de mármol. Los cables bajan <b>por dentro</b>, en un tubo que se coloca antes de las láminas. El mueble flotante lo fabricamos en <b>melamina de 18 mm</b> en nuestro taller.</p>
+  </section>
+
+  <section>
+    <h2>Cómo seguimos</h2>
+    <p class="desc" style="min-height:0">Usted escoge aquí las vetas y el tono del wall panel, y se lo confirmamos con la muestra en la mano. Antes de cortar volvemos a medir la pared, sobre todo el alto junto a la cortina, y revisamos el modelo de su televisor para el soporte.</p>
+  </section>
+
+</main>
+
+<div class="tintband">
+  <div class="inner">
+  <section>
+    <h2>Medidas</h2>
+    <div class="ficha">
+      <dl>
+        <div class="it"><dt>Largo de la pared</dt><dd>386 cm, hasta el mesón</dd></div>
+        <div class="it"><dt>Alto en las correas</dt><dd>256 cm</dd></div>
+        <div class="it"><dt>Alto junto a la cortina</dt><dd>Se confirma en sitio</dd></div>
+        <div class="it"><dt>Láminas de mármol</dt><dd>3, de 120 × 280 cm</dd></div>
+        <div class="it"><dt>Wall panel</dt><dd>2 tiras, de piso a techo</dd></div>
+        <div class="it"><dt>Televisor</dt><dd>55", centro a 110 cm</dd></div>
+        <div class="it"><dt>Mueble flotante</dt><dd>180 × 30 cm</dd></div>
+        <div class="it"><dt>Juntas doradas</dt><dd>4, verticales</dd></div>
+      </dl>
+    </div>
+    <p class="desc" style="min-height:0">La sala que ve es la suya, levantada con las medidas que nos dio. El alto junto a la cortina y el ancho del wall panel se ajustan cuando volvamos a medir. Los demás muebles de la sala no se dibujan.</p>
+  </section>
+  </div>
+</div>
+
+<div class="closer" aria-hidden="true">
+  <div class="inner">
+    <svg viewBox="0 0 307 26" fill="currentColor" preserveAspectRatio="xMinYMid meet">
+          <rect x="0" y="0" width="22" height="26" rx="11" opacity="0.200"/>
+          <rect x="4.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.420"/>
+          <rect x="29" y="0" width="22" height="26" rx="11" opacity="0.188"/>
+          <rect x="33.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.395"/>
+          <rect x="58" y="0" width="13" height="26" rx="6.5" opacity="0.176"/>
+          <rect x="60.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.369"/>
+          <rect x="78" y="0" width="13" height="26" rx="6.5" opacity="0.164"/>
+          <rect x="80.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.344"/>
+          <rect x="98" y="0" width="13" height="26" rx="6.5" opacity="0.152"/>
+          <rect x="100.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.318"/>
+          <rect x="118" y="0" width="22" height="26" rx="11" opacity="0.140"/>
+          <rect x="122.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.293"/>
+          <rect x="147" y="0" width="22" height="26" rx="11" opacity="0.128"/>
+          <rect x="151.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.268"/>
+          <rect x="176" y="0" width="13" height="26" rx="6.5" opacity="0.115"/>
+          <rect x="178.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.242"/>
+          <rect x="196" y="0" width="13" height="26" rx="6.5" opacity="0.103"/>
+          <rect x="198.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.217"/>
+          <rect x="216" y="0" width="13" height="26" rx="6.5" opacity="0.091"/>
+          <rect x="218.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.192"/>
+          <rect x="236" y="0" width="22" height="26" rx="11" opacity="0.079"/>
+          <rect x="240.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.166"/>
+          <rect x="265" y="0" width="22" height="26" rx="11" opacity="0.067"/>
+          <rect x="269.4" y="3" width="8.8" height="20" rx="4.4" opacity="0.141"/>
+          <rect x="294" y="0" width="13" height="26" rx="6.5" opacity="0.055"/>
+          <rect x="296.6" y="3" width="5.2" height="20" rx="2.6" opacity="0.116"/>
+    </svg>
+  </div>
+</div>
+
+<footer>
+  <div class="inner">
+    <svg class="ico" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112.6" ry="112.6" fill="#0B1F3A"/>
+  <g fill="#FFFFFF">
+    <rect x="123.82" y="153.60" width="31.40" height="204.80" rx="4.10"/>
+    <path d="M 183.38 157.70 L 183.38 157.70 Q 183.38 153.60 187.48 153.60 L 214.78 153.60 Q 218.88 153.60 221.12 157.03 L 283.54 252.57 Q 285.78 256.00 288.02 252.57 L 350.44 157.03 Q 352.68 153.60 356.78 153.60 L 384.09 153.60 Q 388.18 153.60 388.18 157.70 L 388.18 354.30 Q 388.18 358.40 384.09 358.40 L 360.87 358.40 Q 356.78 358.40 356.78 354.30 L 356.78 197.97 Q 356.78 193.88 354.54 197.31 L 288.02 298.99 Q 285.78 302.42 283.54 298.99 L 217.03 197.31 Q 214.78 193.88 214.78 197.97 L 214.78 354.30 Q 214.78 358.40 210.69 358.40 L 187.48 358.40 Q 183.38 358.40 183.38 354.30 Z"/>
+  </g>
+</svg>
+    <p class="pie"><strong>INGENIA MOBILIARIO</strong>Camas, muebles y closets a medida</p>
+  </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script>
+(function(){
+  var stage = document.getElementById('stage'), fb = document.getElementById('fallback');
+  if (typeof THREE === 'undefined'){ fb.style.display = 'flex'; return; }
+
+  // ================= medidas dictadas por Ricardo (cm) =================
+  // x a lo largo de la pared (0 = cortina), y hacia arriba, z hacia la sala
+  var L = 386;                 // pared del TV, de la cortina hasta el mesón
+  var H_ALTA = 256;            // lado del mesón, donde llegan las dos correas
+  var H_BAJA = 230;            // lado cortina: SUPUESTO, pendiente de medir
+  var WPC = 16;                // ancho de cada tira de wall panel: SUPUESTO
+  var RODAPIE = 8;             // SUPUESTO
+  var LAM_W = 120, LAM_H = 280, LAM_T = 0.3;
+  var TV_W = 123, TV_H = 71, TV_T = 2.5, TV_CY = 110;     // 55" aprox
+  var MU_W = 180, MU_H = 30, MU_D = 32, MU_Y = 35;        // mueble flotante, melamina 18
+  var XR = L + 130;            // la cocina sigue detrás del mesón
+  var ZF = 430;                // fondo de la sala, hacia el comedor
+  var BALDOSA = 45;
+  var Z0 = 1.2;                // cara de las láminas sobre la pared
+  function alturaEn(x){ return x >= L ? H_ALTA : H_BAJA + (H_ALTA - H_BAJA) * x / L; }
+
+  var CAMPO = L - 2*WPC, LADO = (CAMPO - LAM_W)/2;
+  var C0 = WPC + LADO, C1 = C0 + LAM_W;
+
+  var ren;
+  try { ren = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true}); }
+  catch(err){ fb.style.display = 'flex'; return; }
+  ren.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  ren.shadowMap.enabled = true;
+  ren.shadowMap.type = THREE.PCFSoftShadowMap;
+  ren.outputEncoding = THREE.sRGBEncoding;
+  ren.toneMapping = THREE.ACESFilmicToneMapping;
+  ren.toneMappingExposure = 0.74;
+  stage.insertBefore(ren.domElement, stage.firstChild);
+
+  var esc = new THREE.Scene();
+  esc.background = new THREE.Color(0xEAE8E3);
+  var cam = new THREE.PerspectiveCamera(55, 16/10, 1, 5000);
+
+  // ---------- entorno procedural: lo que reflejan el mármol y el dorado ----------
+  (function(){
+    var sc = new THREE.Scene(), g = new THREE.BoxGeometry(1,1,1);
+    function c(col, x,y,z, sx,sy,sz, lado){
+      var m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({color:col, side:lado||THREE.FrontSide}));
+      m.position.set(x,y,z); m.scale.set(sx,sy,sz); sc.add(m);
+    }
+    c(0xd8dcd6, 0,0,0, 40,26,40, THREE.BackSide);
+    c(0xffffff, 0,12.4,0, 18,0.2,18);
+    c(0xfff1de, -16,3,3, 0.2,12,14);
+    c(0xe9f0ff, 15,5,-8, 0.2,10,12);
+    var p = new THREE.PMREMGenerator(ren);
+    esc.environment = p.fromScene(sc, 0.05).texture;
+    p.dispose();
+  })();
+
+  // ---------- texturas procedurales ----------
+  function lienzoTex(w, h, pinta){
+    var c = document.createElement('canvas'); c.width = w; c.height = h;
+    pinta(c.getContext('2d'), w, h);
+    var t = new THREE.CanvasTexture(c);
+    t.encoding = THREE.sRGBEncoding; t.anisotropy = 8;
+    return t;
+  }
+  function azar(s){ return function(){ s = (s * 16807) % 2147483647; return s / 2147483647; }; }
+  function marmol(semilla, oro){
+    return lienzoTex(768, 1792, function(g, w, h){
+      var r = azar(semilla), i;
+      g.fillStyle = '#f7f6f2'; g.fillRect(0, 0, w, h);
+      for (i = 0; i < 70; i++){
+        var x = r()*w, y = r()*h, rad = 80 + r()*260;
+        var gr = g.createRadialGradient(x, y, 0, x, y, rad);
+        gr.addColorStop(0, 'rgba(200,198,192,.10)'); gr.addColorStop(1, 'rgba(200,198,192,0)');
+        g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      }
+      function veta(rgb, alfa, ancho, n){
+        for (var k = 0; k < n; k++){
+          var x = r()*w, y = -20, a = Math.PI/2 + (r()-0.5)*1.1;
+          g.beginPath(); g.moveTo(x, y);
+          while (y < h + 20 && x > -40 && x < w + 40){
+            a += (r()-0.5)*0.35; a = Math.max(0.35, Math.min(Math.PI - 0.35, a));
+            x += Math.cos(a)*14; y += Math.sin(a)*14; g.lineTo(x, y);
+          }
+          g.strokeStyle = 'rgba(' + rgb + ',' + (alfa*(0.5 + r()*0.5)) + ')';
+          g.lineWidth = ancho*(0.4 + r()); g.stroke();
+        }
+      }
+      veta('150,148,142', 0.35, 2.2, 14);
+      if (oro){ veta('184,140,58', 0.9, 2.4, 7); veta('205,165,80', 0.7, 1, 10); }
+      else    { veta('110,110,112', 0.8, 2.6, 8); veta('140,140,144', 0.6, 1, 10); }
+    });
+  }
+  var mapPiso = lienzoTex(256, 256, function(g, w, h){
+    var r = azar(7), i;
+    g.fillStyle = '#dccfb6'; g.fillRect(0, 0, w, h);
+    for (i = 0; i < 3000; i++){
+      g.fillStyle = 'rgba(' + (150 + r()*60|0) + ',' + (130 + r()*50|0) + ',' + (100 + r()*40|0) + ',.08)';
+      g.fillRect(r()*w, r()*h, 3, 3);
+    }
+    g.strokeStyle = '#c2b394'; g.lineWidth = 3; g.strokeRect(0, 0, w, h);
+  });
+  mapPiso.wrapS = mapPiso.wrapT = THREE.RepeatWrapping;
+  mapPiso.repeat.set(XR / BALDOSA, ZF / BALDOSA);
+
+  // ---------- materiales ----------
+  var mPared = new THREE.MeshStandardMaterial({color:0xc9d9c7, roughness:0.96});
+  var mPiso = new THREE.MeshStandardMaterial({map:mapPiso, roughness:0.32});
+  var mTecho = new THREE.MeshStandardMaterial({color:0xf3f2ee, roughness:0.85});
+  var mRodapie = new THREE.MeshStandardMaterial({color:0xd2c4a8, roughness:0.45});
+  var mCortina = new THREE.MeshStandardMaterial({color:0xd9cfc6, roughness:1});
+  var mBarra = new THREE.MeshStandardMaterial({color:0x8a8a88, roughness:0.4, metalness:0.8});
+  var mGranito = new THREE.MeshStandardMaterial({color:0x1c1b1a, roughness:0.25});
+  var mCeramica = new THREE.MeshStandardMaterial({color:0xe2d6c0, roughness:0.4});
+  var mDorado = new THREE.MeshStandardMaterial({color:0xd4a94e, roughness:0.28, metalness:1});
+  var mMueble = new THREE.MeshStandardMaterial({color:0x121211, roughness:0.7});
+  var mRanura = new THREE.MeshBasicMaterial({color:0x050505});
+  var mTv = new THREE.MeshStandardMaterial({color:0x111111, roughness:0.45});
+  var mPantalla = new THREE.MeshPhysicalMaterial({color:0x020203, roughness:0.06, clearcoat:1, metalness:0.2});
+  var mWpc = new THREE.MeshStandardMaterial({color:0xa77b4f, roughness:0.7});
+  var mLam = [], SEMILLAS = [11, 23, 37];
+  SEMILLAS.forEach(function(){ mLam.push(new THREE.MeshPhysicalMaterial({roughness:0.14, clearcoat:0.8, clearcoatRoughness:0.1, envMapIntensity:0.45})); });
+  [mPared, mPiso, mTecho, mRodapie, mCortina, mMueble, mTv].forEach(function(m){ m.envMapIntensity = 0.2; });
+  mPantalla.envMapIntensity = 0.06;
+
+  function caja(x0,x1,y0,y1,z0,z1,mat,padre,sombra){
+    var g = new THREE.BoxGeometry(Math.abs(x1-x0), Math.abs(y1-y0), Math.abs(z1-z0));
+    var m = new THREE.Mesh(g, mat);
+    m.position.set((x0+x1)/2, (y0+y1)/2, (z0+z1)/2);
+    m.receiveShadow = true;
+    if (sombra !== false) m.castShadow = true;
+    (padre || esc).add(m);
+    return m;
+  }
+  // pieza pegada a la pared que sigue la caída del techo
+  function placa(x0, x1, y0, prof, z, mat, padre){
+    var s = new THREE.Shape();
+    s.moveTo(x0, y0); s.lineTo(x1, y0); s.lineTo(x1, alturaEn(x1)); s.lineTo(x0, alturaEn(x0)); s.closePath();
+    var m = new THREE.Mesh(new THREE.ExtrudeGeometry(s, {depth:prof, bevelEnabled:false}), mat);
+    m.position.z = z; m.castShadow = true; m.receiveShadow = true;
+    (padre || esc).add(m);
+    return m;
+  }
+
+  // ================= la sala =================
+  caja(-9, XR+9, -2, 0, -9, ZF+9, mPiso, null, false);
+  // pared del TV (con su continuación tras el mesón) y pared del comedor: una sola pieza cada una
+  function muro(z){
+    var f = new THREE.Shape();
+    f.moveTo(0, 0); f.lineTo(XR, 0); f.lineTo(XR, H_ALTA + 4); f.lineTo(L, H_ALTA + 4); f.lineTo(0, H_BAJA + 4); f.closePath();
+    var m = new THREE.Mesh(new THREE.ExtrudeGeometry(f, {depth:9, bevelEnabled:false}), mPared);
+    m.position.z = z; m.receiveShadow = true; esc.add(m);
+  }
+  muro(-9); muro(ZF);
+  // techo: el tramo inclinado sobre la sala y el tramo plano sobre la cocina
+  var incl = Math.atan2(H_ALTA - H_BAJA, L), LT = Math.hypot(L, H_ALTA - H_BAJA);
+  var techo = new THREE.Mesh(new THREE.BoxGeometry(LT + 2, 3, ZF + 18), mTecho);
+  techo.position.set(L/2, (H_ALTA + H_BAJA)/2 + 1.5, ZF/2); techo.rotation.z = incl;
+  techo.receiveShadow = true; esc.add(techo);
+  caja(L, XR + 9, H_ALTA, H_ALTA + 3, -9, ZF + 9, mTecho, null, false);
+  caja(-9, 0, 0, H_BAJA + 4, -9, ZF+9, mPared, null, false);          // pared de la cortina
+  caja(XR, XR+9, 0, H_ALTA + 4, -9, ZF+9, mPared, null, false);       // fondo de la cocina
+  // correas del techo, de pared a pared; las dos juntas del centro de la casa sobre el mesón
+  [60, L - 7, L + 5, L + 95].forEach(function(xc){
+    caja(xc-5, xc+5, alturaEn(xc) - 11, alturaEn(xc) + 1, -9, ZF+9, mTecho, null, false);
+  });
+  // rodapié
+  caja(0, XR, 0, RODAPIE, 0, 1, mRodapie, null, false);
+  caja(0, 1, 0, RODAPIE, 0, ZF, mRodapie, null, false);
+  // cortina sobre la ventana de la pared izquierda
+  caja(0.5, 7, 4, 232, 25, 175, mCortina);
+  caja(2, 5, 234, 237, 15, 185, mBarra, null, false);
+  // mesón de la cocina: media pared con su tope
+  caja(L, L+12, 0, 100, 0, 190, mCeramica);
+  caja(L, L+50, 100, 104, 0, 195, mGranito);
+
+  // ================= la propuesta =================
+  var gProp = new THREE.Group(); esc.add(gProp);
+  var gPerfiles = new THREE.Group(), gMueble = new THREE.Group(), gWpc = new THREE.Group();
+  gProp.add(gPerfiles); gProp.add(gMueble); gProp.add(gWpc);
+
+  [[WPC, C0], [C0, C1], [C1, L - WPC]].forEach(function(t, i){
+    var m = placa(t[0], t[1], RODAPIE, LAM_T, Z0, mLam[i], gProp);
+    m.userData.x0 = t[0];
+  });
+  function vetas(oro){
+    gProp.children.forEach(function(m){
+      if (m.userData.x0 === undefined) return;
+      var i = [WPC, C0, C1].indexOf(m.userData.x0);
+      var t = marmol(SEMILLAS[i], oro);
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(1/LAM_W, 1/LAM_H);
+      t.offset.set(-m.userData.x0/LAM_W, -RODAPIE/LAM_H);
+      if (mLam[i].map) mLam[i].map.dispose();
+      mLam[i].map = t; mLam[i].needsUpdate = true;
+    });
+  }
+
+  // wall panel acanalado: base y canales de media caña
+  [[0, WPC], [L - WPC, L]].forEach(function(t){
+    placa(t[0], t[1], RODAPIE, 1, Z0, mWpc, gWpc);
+    var n = Math.max(3, Math.round((t[1]-t[0]) / 2.6)), paso = (t[1]-t[0]) / n;
+    for (var k = 0; k < n; k++){
+      var x = t[0] + paso*(k + 0.5), hh = alturaEn(x) - RODAPIE;
+      var c = new THREE.Mesh(new THREE.CylinderGeometry(paso*0.42, paso*0.42, hh, 14, 1, false, -Math.PI/2, Math.PI), mWpc);
+      c.position.set(x, RODAPIE + hh/2, Z0 + 1); c.castShadow = true; c.receiveShadow = true;
+      gWpc.add(c);
+    }
+  });
+
+  // perfiles dorados en las cuatro juntas verticales
+  [WPC, C0, C1, L - WPC].forEach(function(x){ placa(x - 0.5, x + 0.5, RODAPIE, 0.8, Z0, mDorado, gPerfiles); });
+
+  // luz LED detrás del TV
+  var mHalo = new THREE.MeshBasicMaterial({transparent:true, depthWrite:false, toneMapped:false, opacity:0.35,
+    map: lienzoTex(256, 256, function(g, w, h){
+      var gr = g.createRadialGradient(w/2, h/2, 10, w/2, h/2, w/2);
+      gr.addColorStop(0, 'rgba(255,196,120,.85)'); gr.addColorStop(0.55, 'rgba(255,180,100,.35)'); gr.addColorStop(1, 'rgba(255,180,100,0)');
+      g.fillStyle = gr; g.fillRect(0, 0, w, h);
+    })});
+  var halo = new THREE.Mesh(new THREE.PlaneGeometry(TV_W + 80, TV_H + 70), mHalo);
+  halo.position.set(L/2, TV_CY, Z0 + 0.6); gProp.add(halo);
+  var luzTv = new THREE.PointLight(0xffc27a, 0, 220, 2);
+  luzTv.position.set(L/2, TV_CY, Z0 + 2); gProp.add(luzTv);
+
+  // televisor
+  caja(L/2 - TV_W/2, L/2 + TV_W/2, TV_CY - TV_H/2, TV_CY + TV_H/2, Z0 + 4, Z0 + 4 + TV_T, mTv, gProp).receiveShadow = false;
+  var pant = new THREE.Mesh(new THREE.PlaneGeometry(TV_W - 1.2, TV_H - 1.2), mPantalla);
+  pant.position.set(L/2, TV_CY, Z0 + 4 + TV_T + 0.02); gProp.add(pant);
+
+  // mueble flotante, dos puertas
+  caja(L/2 - MU_W/2, L/2 + MU_W/2, MU_Y, MU_Y + MU_H, Z0 + 0.5, Z0 + 0.5 + MU_D, mMueble, gMueble);
+  caja(L/2 - 0.2, L/2 + 0.2, MU_Y + 1, MU_Y + MU_H - 1, Z0 + 0.5 + MU_D, Z0 + 0.7 + MU_D, mRanura, gMueble, false);
+
+  // ---------- luces ----------
+  var hemi = new THREE.HemisphereLight(0xfff8ec, 0xb8ab90, 0.5); esc.add(hemi);
+  var sol = new THREE.DirectionalLight(0xfff0dc, 1.25);   // luz alta desde la sala, un poco de lado: marca los canales del wall panel
+  sol.position.set(L/2 + 260, 380, 560);
+  sol.castShadow = true;
+  sol.shadow.mapSize.set(2048, 2048);
+  sol.shadow.camera.left = -360; sol.shadow.camera.right = 360;
+  sol.shadow.camera.top = 360; sol.shadow.camera.bottom = -120;
+  sol.shadow.camera.near = 10; sol.shadow.camera.far = 1600;
+  sol.shadow.bias = -0.0012; sol.shadow.normalBias = 0.7;
+  esc.add(sol); esc.add(sol.target);
+  sol.target.position.set(L/2, 100, 0);
+  var relleno = new THREE.DirectionalLight(0xe6eef8, 0.3);
+  relleno.position.set(-300, 220, 380); esc.add(relleno);
+  var plafon = new THREE.PointLight(0xffe6bd, 0, 700, 2);
+  plafon.position.set(L/2, 225, 220); esc.add(plafon);
+
+  // ---------- cámara: siempre dentro de la sala ----------
+  var blanco = new THREE.Vector3(L/2, 118, 0);
+  var rad = 370, tha = 0, phi = 1.6;
+  var RAD_MIN = 70, RAD_MAX = 520;
+  function sitio(){
+    var x = blanco.x + rad*Math.sin(phi)*Math.sin(tha);
+    var y = blanco.y + rad*Math.cos(phi);
+    var z = blanco.z + rad*Math.sin(phi)*Math.cos(tha);
+    // la cámara no atraviesa paredes, piso ni techo
+    x = Math.max(14, Math.min(L - 20, x));          // se queda en la sala, no pasa a la cocina
+    z = Math.max(16, Math.min(ZF - 14, z));
+    y = Math.max(30, Math.min(alturaEn(x) - 22, y));
+    if (x > L - 10 && x < L + 60 && z < 207) y = Math.max(y, 116);   // por encima del mesón, nunca dentro
+    cam.position.set(x, y, z);
+    cam.lookAt(blanco);
+  }
+  function vistaDesde(px, py, pz, tx, ty, tz){
+    blanco.set(tx, ty, tz);
+    var dx = px - tx, dy = py - ty, dz = pz - tz;
+    rad = Math.sqrt(dx*dx + dy*dy + dz*dz);
+    phi = Math.acos(Math.max(-1, Math.min(1, dy / rad)));
+    tha = Math.atan2(dx, dz);
+    sitio();
+  }
+
+  var lienzo = ren.domElement;
+  lienzo.style.touchAction = 'none';
+  var arr = false, lx = 0, ly = 0;
+  lienzo.addEventListener('pointerdown', function(e){
+    arr = true; lx = e.clientX; ly = e.clientY;
+    try { lienzo.setPointerCapture(e.pointerId); } catch(err){}
+  });
+  lienzo.addEventListener('pointermove', function(e){
+    if (!arr) return;
+    tha -= (e.clientX-lx)*0.0068; phi -= (e.clientY-ly)*0.005;
+    tha = Math.max(-1.25, Math.min(1.25, tha));     // siempre de cara a la pared del TV
+    phi = Math.max(0.75, Math.min(2.05, phi));
+    lx = e.clientX; ly = e.clientY; sitio(); pinta();
+  });
+  function suelta(){ arr = false; }
+  lienzo.addEventListener('pointerup', suelta);
+  lienzo.addEventListener('pointercancel', suelta);
+  lienzo.addEventListener('wheel', function(e){
+    rad = Math.max(RAD_MIN, Math.min(RAD_MAX, rad + e.deltaY*0.55)); sitio(); pinta(); e.preventDefault();
+  }, {passive:false});
+  var d0 = null;
+  lienzo.addEventListener('touchstart', function(e){
+    if (e.touches.length === 2) d0 = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+  }, {passive:true});
+  lienzo.addEventListener('touchmove', function(e){
+    if (e.touches.length === 2 && d0){
+      var d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      rad = Math.max(RAD_MIN, Math.min(RAD_MAX, rad*(d0/d))); d0 = d; sitio(); pinta(); e.preventDefault();
+    }
+  }, {passive:false});
+
+  // encuadre horizontal fijo: en el teléfono crece lo que se ve de piso y techo
+  var TAN_H = Math.tan(55/2 * Math.PI/180) * 1.6;
+  function tam(){
+    var w = stage.clientWidth || 800;
+    var h = stage.clientHeight || Math.round(w * 10 / 16);
+    ren.setSize(w, h);
+    cam.aspect = w / h;
+    cam.fov = Math.max(42, Math.min(75, 2 * Math.atan(TAN_H / cam.aspect) * 180 / Math.PI));
+    cam.updateProjectionMatrix();
+  }
+  function pinta(){ ren.render(esc, cam); }
+  function todo(){ tam(); sitio(); pinta(); }
+  window.addEventListener('resize', todo);
+
+  // ---------- controles ----------
+  // posiciones reales de cámara: x, y, z · mirando a x, y, z
+  var vistas = {
+    b1: [L/2, 135, 395,   L/2, 118, 0],     // de frente, desde el fondo de la sala
+    b2: [330, 140, 380,   175, 120, 0],     // donde está el sofá, como la foto
+    b3: [ 40, 150, 385,   220, 118, 0],     // desde la cortina
+    b4: [ 70, 150, 105,   10, 140, 0]       // el wall panel y el perfil dorado
+  };
+  ['b1','b2','b3','b4'].forEach(function(id){
+    document.getElementById(id).addEventListener('click', function(){
+      var v = vistas[id];
+      vistaDesde(v[0], v[1], v[2], v[3], v[4], v[5]);
+      ['b1','b2','b3','b4'].forEach(function(o){
+        document.getElementById(o).setAttribute('aria-pressed', o === id ? 'true' : 'false');
+      });
+      pinta();
+    });
+  });
+  function alterna(id, grupo){
+    document.getElementById(id).addEventListener('click', function(){
+      grupo.visible = !grupo.visible;
+      this.setAttribute('aria-pressed', grupo.visible ? 'true' : 'false');
+      pinta();
+    });
+  }
+  alterna('mu', gMueble);
+  alterna('pf', gPerfiles);
+
+  var noche = false;
+  document.getElementById('luz').addEventListener('click', function(){
+    noche = !noche;
+    this.setAttribute('aria-pressed', noche ? 'true' : 'false');
+    this.textContent = noche ? 'Luz de día' : 'Luz de noche';
+    sol.intensity     = noche ? 0.02 : 1.25;
+    relleno.intensity = noche ? 0.03 : 0.3;
+    hemi.intensity    = noche ? 0.08 : 0.5;
+    plafon.intensity  = noche ? 0.9 : 0;
+    luzTv.intensity   = noche ? 1.6 : 0;
+    mHalo.opacity     = noche ? 1 : 0.35;
+    ren.toneMappingExposure = noche ? 1.05 : 0.74;
+    pinta();
+  });
+
+  ['v0','v1'].forEach(function(id, i){
+    document.getElementById(id).addEventListener('click', function(){
+      vetas(i === 0);
+      ['v0','v1'].forEach(function(o){ document.getElementById(o).setAttribute('aria-pressed', o === id ? 'true' : 'false'); });
+      pinta();
+    });
+  });
+
+  // ---------- tono del wall panel ----------
+  var TONOS = [[0xA77B4F, 0.7], [0x6B4A30, 0.68], [0x9A958C, 0.72], [0x1E1D1B, 0.55]];
+  function tono(i){
+    mWpc.color.setHex(TONOS[i][0]); mWpc.roughness = TONOS[i][1];
+    for (var k = 0; k < TONOS.length; k++){
+      document.getElementById('t'+k).setAttribute('aria-pressed', k === i ? 'true' : 'false');
+    }
+    pinta();
+  }
+  for (var k2 = 0; k2 < TONOS.length; k2++){
+    (function(k){
+      document.getElementById('t'+k).addEventListener('click', function(){ tono(k); });
+    })(k2);
+  }
+
+  vetas(true);
+  tono(0);
+  var v0 = vistas.b1;
+  vistaDesde(v0[0], v0[1], v0[2], v0[3], v0[4], v0[5]);
+  todo();
+})();
+</script>
+</body>
+</html>
