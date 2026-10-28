@@ -44,6 +44,7 @@ main{max-width:920px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-lef
 #stage canvas{display:block;width:100%;height:100%}
 #fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;color:#5A6B80;font-size:14px}
 .hint{position:absolute;left:12px;bottom:9px;font-size:11px;color:#7A736A;letter-spacing:.05em;pointer-events:none}
+#stage .hint{color:#EDE9E1;text-shadow:0 1px 2px rgba(0,0,0,.6)}   /* se lee sobre la sala de noche */
 section{display:flex;flex-direction:column;gap:10px}
 h2{font-size:13px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--suave);margin:0;display:flex;align-items:center;gap:9px}
 h2::before{content:"";width:3px;height:13px;background:var(--azul);flex:none}
@@ -148,7 +149,7 @@ footer .ico{height:34px;width:auto;display:block}
 <div class="intro">
   <div class="inner">
       <h1>Pared del televisor en mármol</h1>
-      <p class="baja">Su sala con la pared del televisor ya remodelada: láminas tipo mármol blanco de piso a techo, wall panel en los extremos y el televisor centrado. Gírela, véala de día y de noche y pruebe las vetas y los tonos antes de que entre a taller.</p>
+      <p class="baja">Su sala con la pared del televisor ya remodelada: láminas tipo mármol blanco de piso a techo, dos tiras de wall panel en cada extremo y el televisor centrado. Gírela, véala de día y de noche y pruebe las vetas y los tonos antes de que entre a taller.</p>
   </div>
 </div>
 
@@ -195,17 +196,17 @@ footer .ico{height:34px;width:auto;display:block}
   <section>
     <h2>Tono del wall panel</h2>
     <div class="opts" role="group" aria-label="Tono del wall panel">
-      <button type="button" class="sw" id="t0" aria-pressed="true" aria-label="Roble" style="background:#A77B4F"></button>
-      <button type="button" class="sw" id="t1" aria-pressed="false" aria-label="Nogal" style="background:#6B4A30"></button>
+      <button type="button" class="sw" id="t0" aria-pressed="true" aria-label="Marrón" style="background:#4A2E1C"></button>
+      <button type="button" class="sw" id="t1" aria-pressed="false" aria-label="Roble" style="background:#A77B4F"></button>
       <button type="button" class="sw" id="t2" aria-pressed="false" aria-label="Gris" style="background:#9A958C"></button>
       <button type="button" class="sw" id="t3" aria-pressed="false" aria-label="Negro" style="background:#1E1D1B"></button>
     </div>
-    <p class="desc" style="min-height:0">Con hilos dorados lucen mejor el roble, el nogal o el negro. Con hilos grises, el gris o el negro.</p>
+    <p class="desc" style="min-height:0">Con hilos dorados lucen mejor el marrón, el roble o el negro. Con hilos grises, el gris o el negro.</p>
   </section>
 
   <section>
     <h2>Qué lleva</h2>
-    <p class="desc" style="min-height:0">La pared completa forrada en <b>láminas tipo mármol blanco</b>, de piso a techo, con <b>perfiles dorados</b> en las juntas. Una tira de <b>wall panel acanalado</b> en cada extremo, contra la cortina y contra el mesón. El <b>televisor</b> centrado en la pared y, debajo, un <b>mueble flotante</b> para el equipo de sonido. La repisa, el router y los cables que hoy están a la vista se quitan.</p>
+    <p class="desc" style="min-height:0">La pared completa forrada en <b>láminas tipo mármol blanco</b>, de piso a techo, con <b>perfiles dorados</b> en las juntas. Dos tiras de <b>wall panel acanalado</b> en cada extremo, contra la cortina y contra el mesón. El <b>televisor</b> centrado en la pared y, debajo, un <b>mueble flotante</b> para el equipo de sonido. La repisa, el router y los cables que hoy están a la vista se quitan.</p>
   </section>
 
   <section>
@@ -230,7 +231,7 @@ footer .ico{height:34px;width:auto;display:block}
         <div class="it"><dt>Alto en las correas</dt><dd>256 cm</dd></div>
         <div class="it"><dt>Alto junto a la cortina</dt><dd>Se confirma en sitio</dd></div>
         <div class="it"><dt>Láminas de mármol</dt><dd>3, de 120 × 280 cm</dd></div>
-        <div class="it"><dt>Wall panel</dt><dd>2 tiras, de piso a techo</dd></div>
+        <div class="it"><dt>Wall panel</dt><dd>4 tiras, dos por lado</dd></div>
         <div class="it"><dt>Televisor</dt><dd>55", centro a 110 cm</dd></div>
         <div class="it"><dt>Mueble flotante</dt><dd>180 × 30 cm</dd></div>
         <div class="it"><dt>Juntas doradas</dt><dd>4, verticales</dd></div>
@@ -299,7 +300,9 @@ footer .ico{height:34px;width:auto;display:block}
   var L = 386;                 // pared del TV, de la cortina hasta el mesón
   var H_ALTA = 256;            // lado del mesón, donde llegan las dos correas
   var H_BAJA = 230;            // lado cortina: SUPUESTO, pendiente de medir
-  var WPC = 16;                // ancho de cada tira de wall panel: SUPUESTO
+  var TIRA = 16;               // ancho de cada tira de wall panel: SUPUESTO
+  var N_TIRAS = 2;             // dos tiras por lado (Ricardo)
+  var WPC = TIRA * N_TIRAS;    // franja de wall panel en cada extremo
   var RODAPIE = 8;             // SUPUESTO
   var LAM_W = 120, LAM_H = 280, LAM_T = 0.3;
   var TV_W = 123, TV_H = 71, TV_T = 2.5, TV_CY = 110;     // 55" aprox
@@ -393,7 +396,7 @@ footer .ico{height:34px;width:auto;display:block}
   mapPiso.repeat.set(XR / BALDOSA, ZF / BALDOSA);
 
   // ---------- materiales ----------
-  var mPared = new THREE.MeshStandardMaterial({color:0xc9d9c7, roughness:0.96});
+  var mPared = new THREE.MeshStandardMaterial({color:0x9fb39c, roughness:0.96});   // verde de la sala, un tono más oscuro para que resalte el mármol
   var mPiso = new THREE.MeshStandardMaterial({map:mapPiso, roughness:0.32});
   var mTecho = new THREE.MeshStandardMaterial({color:0xf3f2ee, roughness:0.85});
   var mRodapie = new THREE.MeshStandardMaterial({color:0xd2c4a8, roughness:0.45});
@@ -406,7 +409,8 @@ footer .ico{height:34px;width:auto;display:block}
   var mRanura = new THREE.MeshBasicMaterial({color:0x050505});
   var mTv = new THREE.MeshStandardMaterial({color:0x111111, roughness:0.45});
   var mPantalla = new THREE.MeshPhysicalMaterial({color:0x020203, roughness:0.06, clearcoat:1, metalness:0.2});
-  var mWpc = new THREE.MeshStandardMaterial({color:0xa77b4f, roughness:0.7});
+  var mWpc = new THREE.MeshStandardMaterial({color:0x4a2e1c, roughness:0.62});
+  mWpc.envMapIntensity = 0.12;
   var mLam = [], SEMILLAS = [11, 23, 37];
   SEMILLAS.forEach(function(){ mLam.push(new THREE.MeshPhysicalMaterial({roughness:0.14, clearcoat:0.8, clearcoatRoughness:0.1, envMapIntensity:0.45})); });
   [mPared, mPiso, mTecho, mRodapie, mCortina, mMueble, mTv].forEach(function(m){ m.envMapIntensity = 0.2; });
@@ -486,7 +490,9 @@ footer .ico{height:34px;width:auto;display:block}
   }
 
   // wall panel acanalado: base y canales de media caña
-  [[0, WPC], [L - WPC, L]].forEach(function(t){
+  var tiras = [];
+  for (var q = 0; q < N_TIRAS; q++){ tiras.push([q*TIRA, (q+1)*TIRA]); tiras.push([L - (q+1)*TIRA, L - q*TIRA]); }
+  tiras.forEach(function(t){
     placa(t[0], t[1], RODAPIE, 1, Z0, mWpc, gWpc);
     var n = Math.max(3, Math.round((t[1]-t[0]) / 2.6)), paso = (t[1]-t[0]) / n;
     for (var k = 0; k < n; k++){
@@ -536,7 +542,7 @@ footer .ico{height:34px;width:auto;display:block}
   var relleno = new THREE.DirectionalLight(0xe6eef8, 0.3);
   relleno.position.set(-300, 220, 380); esc.add(relleno);
   var plafon = new THREE.PointLight(0xffe6bd, 0, 700, 2);
-  plafon.position.set(L/2, 225, 220); esc.add(plafon);
+  plafon.position.set(L/2, 225, 320);   // lámpara del techo hacia el medio de la sala esc.add(plafon);
 
   // ---------- cámara: siempre dentro de la sala ----------
   var blanco = new THREE.Vector3(L/2, 118, 0);
@@ -616,7 +622,7 @@ footer .ico{height:34px;width:auto;display:block}
     b1: [L/2, 135, 395,   L/2, 118, 0],     // de frente, desde el fondo de la sala
     b2: [330, 140, 380,   175, 120, 0],     // donde está el sofá, como la foto
     b3: [ 40, 150, 385,   220, 118, 0],     // desde la cortina
-    b4: [ 70, 150, 105,   10, 140, 0]       // el wall panel y el perfil dorado
+    b4: [ 85, 150, 110,   18, 140, 0]       // el wall panel y el perfil dorado
   };
   ['b1','b2','b3','b4'].forEach(function(id){
     document.getElementById(id).addEventListener('click', function(){
@@ -646,10 +652,10 @@ footer .ico{height:34px;width:auto;display:block}
     sol.intensity     = noche ? 0.02 : 1.25;
     relleno.intensity = noche ? 0.03 : 0.3;
     hemi.intensity    = noche ? 0.08 : 0.5;
-    plafon.intensity  = noche ? 0.9 : 0;
-    luzTv.intensity   = noche ? 1.6 : 0;
+    plafon.intensity  = noche ? 0.75 : 0;
+    luzTv.intensity   = noche ? 2.0 : 0;
     mHalo.opacity     = noche ? 1 : 0.35;
-    ren.toneMappingExposure = noche ? 1.05 : 0.74;
+    ren.toneMappingExposure = noche ? 0.92 : 0.74;
     pinta();
   });
 
@@ -662,7 +668,7 @@ footer .ico{height:34px;width:auto;display:block}
   });
 
   // ---------- tono del wall panel ----------
-  var TONOS = [[0xA77B4F, 0.7], [0x6B4A30, 0.68], [0x9A958C, 0.72], [0x1E1D1B, 0.55]];
+  var TONOS = [[0x4A2E1C, 0.62], [0xA77B4F, 0.7], [0x9A958C, 0.72], [0x1E1D1B, 0.55]];   // marrón, roble, gris, negro
   function tono(i){
     mWpc.color.setHex(TONOS[i][0]); mWpc.roughness = TONOS[i][1];
     for (var k = 0; k < TONOS.length; k++){
@@ -678,6 +684,7 @@ footer .ico{height:34px;width:auto;display:block}
 
   vetas(true);
   tono(0);
+  document.getElementById('luz').click();     // arranca de noche, con el LED del TV encendido
   var v0 = vistas.b1;
   vistaDesde(v0[0], v0[1], v0[2], v0[3], v0[4], v0[5]);
   todo();
