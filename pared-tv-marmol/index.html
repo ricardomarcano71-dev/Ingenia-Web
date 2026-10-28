@@ -78,9 +78,9 @@ footer .ico{height:34px;width:auto;display:block}
 <style>
 /* lo único que se agrega al sistema: el visor a pantalla completa en el teléfono */
 @media (max-width:620px){
-  .tintband .inner{padding-left:0;padding-right:0}
+  .tintband.visor .inner{padding-left:0;padding-right:0}
   .mat{border-left:0;border-right:0;padding:0}
-  #stage{aspect-ratio:3/4;max-height:72vh}
+  #stage{aspect-ratio:1/1;max-height:70vh}
 }
 </style>
 
@@ -152,7 +152,7 @@ footer .ico{height:34px;width:auto;display:block}
   </div>
 </div>
 
-<div class="tintband">
+<div class="tintband visor">
   <div class="inner">
     <div class="mat">
       <div id="stage">
@@ -595,13 +595,15 @@ footer .ico{height:34px;width:auto;display:block}
   }, {passive:false});
 
   // encuadre horizontal fijo: en el teléfono crece lo que se ve de piso y techo
-  var TAN_H = Math.tan(55/2 * Math.PI/180) * 1.6;
+  // en el teléfono el encuadre se cierra a lo justo para que la pared llene el ancho
+  var TAN_H = Math.tan(55/2 * Math.PI/180) * 1.6, TAN_H_TEL = 0.56;
   function tam(){
     var w = stage.clientWidth || 800;
     var h = stage.clientHeight || Math.round(w * 10 / 16);
     ren.setSize(w, h);
     cam.aspect = w / h;
-    cam.fov = Math.max(42, Math.min(75, 2 * Math.atan(TAN_H / cam.aspect) * 180 / Math.PI));
+    var th = w < 620 ? TAN_H_TEL : TAN_H;
+    cam.fov = Math.max(42, Math.min(78, 2 * Math.atan(th / cam.aspect) * 180 / Math.PI));
     cam.updateProjectionMatrix();
   }
   function pinta(){ ren.render(esc, cam); }
