@@ -189,7 +189,7 @@ footer .ico{height:34px;width:auto;display:block}
     <div class="opts" role="group" aria-label="Ambiente">
       <button type="button" id="luz" aria-pressed="false">Luz de noche</button>
       <button type="button" id="mu" aria-pressed="true">Mueble flotante</button>
-      <button type="button" id="pf" aria-pressed="true">Perfiles dorados</button>
+      <button type="button" id="pf" aria-pressed="false">Perfiles dorados</button>
     </div>
   </section>
 
@@ -736,6 +736,7 @@ footer .ico{height:34px;width:auto;display:block}
   vetas('negro');     // arranca con hilos negros, wall panel gris y mueble roble (Ricardo, 29-10)
   tono(3);
   mueble(3);
+  gPerfiles.visible = false;     // arranca sin perfiles dorados (Ricardo, 29-10)
   document.getElementById('luz').click();     // arranca de noche, con el LED del TV encendido
   var v0 = vistas.b1;
   vistaDesde(v0[0], v0[1], v0[2], v0[3], v0[4], v0[5]);
