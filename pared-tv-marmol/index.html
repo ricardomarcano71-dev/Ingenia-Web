@@ -196,9 +196,9 @@ footer .ico{height:34px;width:auto;display:block}
   <section>
     <h2>Vetas del mármol</h2>
     <div class="opts" role="group" aria-label="Vetas del mármol">
-      <button type="button" id="v0" aria-pressed="true">Hilos dorados</button>
+      <button type="button" id="v0" aria-pressed="false">Hilos dorados</button>
       <button type="button" id="v1" aria-pressed="false">Hilos grises</button>
-      <button type="button" id="v2" aria-pressed="false">Hilos negros</button>
+      <button type="button" id="v2" aria-pressed="true">Hilos negros</button>
       <button type="button" id="v3" aria-pressed="false">Hilos beige</button>
     </div>
   </section>
@@ -206,10 +206,10 @@ footer .ico{height:34px;width:auto;display:block}
   <section>
     <h2>Tono del wall panel</h2>
     <div class="opts" role="group" aria-label="Tono del wall panel">
-      <button type="button" class="sw" id="t0" aria-pressed="true" aria-label="Marrón" style="background:#4A2E1C"></button>
+      <button type="button" class="sw" id="t0" aria-pressed="false" aria-label="Marrón" style="background:#4A2E1C"></button>
       <button type="button" class="sw" id="t1" aria-pressed="false" aria-label="Marrón claro" style="background:#8A5A36"></button>
       <button type="button" class="sw" id="t2" aria-pressed="false" aria-label="Roble" style="background:#A77B4F"></button>
-      <button type="button" class="sw" id="t3" aria-pressed="false" aria-label="Gris" style="background:#9A958C"></button>
+      <button type="button" class="sw" id="t3" aria-pressed="true" aria-label="Gris" style="background:#9A958C"></button>
       <button type="button" class="sw" id="t4" aria-pressed="false" aria-label="Negro" style="background:#1E1D1B"></button>
     </div>
     <p class="desc" style="min-height:0">Con hilos dorados o beige lucen mejor el marrón, el marrón claro o el roble. Con hilos grises o negros, el gris o el negro.</p>
@@ -218,10 +218,10 @@ footer .ico{height:34px;width:auto;display:block}
   <section>
     <h2>Color del mueble</h2>
     <div class="opts" role="group" aria-label="Color del mueble">
-      <button type="button" class="sw" id="m0" aria-pressed="true" aria-label="Negro" style="background:#121211"></button>
+      <button type="button" class="sw" id="m0" aria-pressed="false" aria-label="Negro" style="background:#121211"></button>
       <button type="button" class="sw" id="m1" aria-pressed="false" aria-label="Blanco" style="background:#ECEAE4"></button>
       <button type="button" class="sw" id="m2" aria-pressed="false" aria-label="Marrón" style="background:#4A2E1C"></button>
-      <button type="button" class="sw" id="m3" aria-pressed="false" aria-label="Roble" style="background:#A77B4F"></button>
+      <button type="button" class="sw" id="m3" aria-pressed="true" aria-label="Roble" style="background:#A77B4F"></button>
       <button type="button" class="sw" id="m4" aria-pressed="false" aria-label="Gris grafito" style="background:#4B4B4D"></button>
     </div>
     <p class="desc" style="min-height:0">Negro, blanco, marrón, roble o gris grafito. El tono exacto se escoge con el muestrario de melamina en la mano.</p>
@@ -733,9 +733,9 @@ footer .ico{height:34px;width:auto;display:block}
     })(k3);
   }
 
-  vetas('dorado');
-  tono(0);
-  mueble(0);
+  vetas('negro');     // arranca con hilos negros, wall panel gris y mueble roble (Ricardo, 29-10)
+  tono(3);
+  mueble(3);
   document.getElementById('luz').click();     // arranca de noche, con el LED del TV encendido
   var v0 = vistas.b1;
   vistaDesde(v0[0], v0[1], v0[2], v0[3], v0[4], v0[5]);
