@@ -55,6 +55,10 @@ button[aria-pressed="true"]{background:var(--sel);color:var(--blanco);border-col
 button:focus-visible{outline:2px solid var(--apoyo);outline-offset:2px}
 .sw{width:40px;height:34px;padding:0;border:1px solid var(--borde)}
 .sw[aria-pressed="true"]{border:2px solid var(--azul)}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.zoom button{width:42px;height:42px;padding:0;font-size:22px;font-weight:500;line-height:1;background:rgba(255,255,255,.88);color:#1C2B3A;border:1px solid var(--borde);touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.zoom button:hover{background:#FFFFFF}
+.zoom button:active{background:var(--sel);color:var(--blanco)}
 .desc{font-size:15px;color:var(--suave);min-height:3em}
 .desc b{color:var(--texto);font-weight:500}
 .ficha{border:1px solid var(--borde);background:#FFFFFF}
@@ -158,7 +162,11 @@ footer .ico{height:34px;width:auto;display:block}
     <div class="mat">
       <div id="stage">
         <div id="fallback">No se pudo cargar la vista 3D en este dispositivo. Las medidas de abajo siguen siendo válidas.</div>
-        <div class="hint">arrastre para girar · pellizque para acercar</div>
+        <div class="hint">arrastre para girar · + y − para acercar</div>
+        <div class="zoom" role="group" aria-label="Acercar o alejar">
+          <button type="button" id="zmas" aria-label="Acercar">+</button>
+          <button type="button" id="zmenos" aria-label="Alejar">−</button>
+        </div>
       </div>
     </div>
   </div>
@@ -190,6 +198,8 @@ footer .ico{height:34px;width:auto;display:block}
     <div class="opts" role="group" aria-label="Vetas del mármol">
       <button type="button" id="v0" aria-pressed="true">Hilos dorados</button>
       <button type="button" id="v1" aria-pressed="false">Hilos grises</button>
+      <button type="button" id="v2" aria-pressed="false">Hilos negros</button>
+      <button type="button" id="v3" aria-pressed="false">Hilos beige</button>
     </div>
   </section>
 
@@ -197,11 +207,24 @@ footer .ico{height:34px;width:auto;display:block}
     <h2>Tono del wall panel</h2>
     <div class="opts" role="group" aria-label="Tono del wall panel">
       <button type="button" class="sw" id="t0" aria-pressed="true" aria-label="Marrón" style="background:#4A2E1C"></button>
-      <button type="button" class="sw" id="t1" aria-pressed="false" aria-label="Roble" style="background:#A77B4F"></button>
-      <button type="button" class="sw" id="t2" aria-pressed="false" aria-label="Gris" style="background:#9A958C"></button>
-      <button type="button" class="sw" id="t3" aria-pressed="false" aria-label="Negro" style="background:#1E1D1B"></button>
+      <button type="button" class="sw" id="t1" aria-pressed="false" aria-label="Marrón claro" style="background:#8A5A36"></button>
+      <button type="button" class="sw" id="t2" aria-pressed="false" aria-label="Roble" style="background:#A77B4F"></button>
+      <button type="button" class="sw" id="t3" aria-pressed="false" aria-label="Gris" style="background:#9A958C"></button>
+      <button type="button" class="sw" id="t4" aria-pressed="false" aria-label="Negro" style="background:#1E1D1B"></button>
     </div>
-    <p class="desc" style="min-height:0">Con hilos dorados lucen mejor el marrón, el roble o el negro. Con hilos grises, el gris o el negro.</p>
+    <p class="desc" style="min-height:0">Con hilos dorados o beige lucen mejor el marrón, el marrón claro o el roble. Con hilos grises o negros, el gris o el negro.</p>
+  </section>
+
+  <section>
+    <h2>Color del mueble</h2>
+    <div class="opts" role="group" aria-label="Color del mueble">
+      <button type="button" class="sw" id="m0" aria-pressed="true" aria-label="Negro" style="background:#121211"></button>
+      <button type="button" class="sw" id="m1" aria-pressed="false" aria-label="Blanco" style="background:#ECEAE4"></button>
+      <button type="button" class="sw" id="m2" aria-pressed="false" aria-label="Marrón" style="background:#4A2E1C"></button>
+      <button type="button" class="sw" id="m3" aria-pressed="false" aria-label="Roble" style="background:#A77B4F"></button>
+      <button type="button" class="sw" id="m4" aria-pressed="false" aria-label="Gris grafito" style="background:#4B4B4D"></button>
+    </div>
+    <p class="desc" style="min-height:0">Negro, blanco, marrón, roble o gris grafito. El tono exacto se escoge con el muestrario de melamina en la mano.</p>
   </section>
 
   <section>
@@ -216,7 +239,7 @@ footer .ico{height:34px;width:auto;display:block}
 
   <section>
     <h2>Cómo seguimos</h2>
-    <p class="desc" style="min-height:0">Usted escoge aquí las vetas y el tono del wall panel, y se lo confirmamos con la muestra en la mano. Antes de cortar volvemos a medir la pared, sobre todo el alto junto a la cortina, y revisamos el modelo de su televisor para el soporte.</p>
+    <p class="desc" style="min-height:0">Usted escoge aquí las vetas, el tono del wall panel y el color del mueble, y se lo confirmamos con la muestra en la mano. Antes de cortar volvemos a medir la pared, sobre todo el alto junto a la cortina, y revisamos el modelo de su televisor para el soporte.</p>
   </section>
 
 </main>
@@ -356,7 +379,14 @@ footer .ico{height:34px;width:auto;display:block}
     return t;
   }
   function azar(s){ return function(){ s = (s * 16807) % 2147483647; return s / 2147483647; }; }
-  function marmol(semilla, oro){
+  // color de las vetas: [veta gruesa, veta fina]
+  var VETAS = {
+    dorado: [['184,140,58', 0.9, 2.4, 7], ['205,165,80', 0.7, 1, 10]],
+    gris:   [['110,110,112', 0.8, 2.6, 8], ['140,140,144', 0.6, 1, 10]],
+    negro:  [['28,28,30', 0.85, 2.6, 8], ['55,55,58', 0.6, 1, 10]],
+    beige:  [['150,118,84', 0.9, 2.6, 8], ['176,148,114', 0.7, 1, 10]]
+  };
+  function marmol(semilla, clave){
     return lienzoTex(768, 1792, function(g, w, h){
       var r = azar(semilla), i;
       g.fillStyle = '#f7f6f2'; g.fillRect(0, 0, w, h);
@@ -379,8 +409,7 @@ footer .ico{height:34px;width:auto;display:block}
         }
       }
       veta('150,148,142', 0.35, 2.2, 14);
-      if (oro){ veta('184,140,58', 0.9, 2.4, 7); veta('205,165,80', 0.7, 1, 10); }
-      else    { veta('110,110,112', 0.8, 2.6, 8); veta('140,140,144', 0.6, 1, 10); }
+      VETAS[clave].forEach(function(v){ veta(v[0], v[1], v[2], v[3]); });
     });
   }
   var mapPiso = lienzoTex(256, 256, function(g, w, h){
@@ -476,11 +505,11 @@ footer .ico{height:34px;width:auto;display:block}
     var m = placa(t[0], t[1], RODAPIE, LAM_T, Z0, mLam[i], gProp);
     m.userData.x0 = t[0];
   });
-  function vetas(oro){
+  function vetas(clave){
     gProp.children.forEach(function(m){
       if (m.userData.x0 === undefined) return;
       var i = [WPC, C0, C1].indexOf(m.userData.x0);
-      var t = marmol(SEMILLAS[i], oro);
+      var t = marmol(SEMILLAS[i], clave);
       t.wrapS = t.wrapT = THREE.RepeatWrapping;
       t.repeat.set(1/LAM_W, 1/LAM_H);
       t.offset.set(-m.userData.x0/LAM_W, -RODAPIE/LAM_H);
@@ -586,6 +615,11 @@ footer .ico{height:34px;width:auto;display:block}
   function suelta(){ arr = false; }
   lienzo.addEventListener('pointerup', suelta);
   lienzo.addEventListener('pointercancel', suelta);
+  function zoom(f){
+    rad = Math.max(RAD_MIN, Math.min(RAD_MAX, rad*f)); sitio(); pinta();
+  }
+  document.getElementById('zmas').addEventListener('click', function(){ zoom(0.8); });
+  document.getElementById('zmenos').addEventListener('click', function(){ zoom(1.25); });
   lienzo.addEventListener('wheel', function(e){
     rad = Math.max(RAD_MIN, Math.min(RAD_MAX, rad + e.deltaY*0.55)); sitio(); pinta(); e.preventDefault();
   }, {passive:false});
@@ -659,16 +693,18 @@ footer .ico{height:34px;width:auto;display:block}
     pinta();
   });
 
-  ['v0','v1'].forEach(function(id, i){
+  var CLAVES_VETA = ['dorado', 'gris', 'negro', 'beige'];
+  var BOT_VETA = ['v0', 'v1', 'v2', 'v3'];
+  BOT_VETA.forEach(function(id, i){
     document.getElementById(id).addEventListener('click', function(){
-      vetas(i === 0);
-      ['v0','v1'].forEach(function(o){ document.getElementById(o).setAttribute('aria-pressed', o === id ? 'true' : 'false'); });
+      vetas(CLAVES_VETA[i]);
+      BOT_VETA.forEach(function(o){ document.getElementById(o).setAttribute('aria-pressed', o === id ? 'true' : 'false'); });
       pinta();
     });
   });
 
   // ---------- tono del wall panel ----------
-  var TONOS = [[0x4A2E1C, 0.62], [0xA77B4F, 0.7], [0x9A958C, 0.72], [0x1E1D1B, 0.55]];   // marrón, roble, gris, negro
+  var TONOS = [[0x4A2E1C, 0.62], [0x8A5A36, 0.66], [0xA77B4F, 0.7], [0x9A958C, 0.72], [0x1E1D1B, 0.55]];   // marrón, marrón claro, roble, gris, negro
   function tono(i){
     mWpc.color.setHex(TONOS[i][0]); mWpc.roughness = TONOS[i][1];
     for (var k = 0; k < TONOS.length; k++){
@@ -682,8 +718,24 @@ footer .ico{height:34px;width:auto;display:block}
     })(k2);
   }
 
-  vetas(true);
+  // ---------- color del mueble (melamina) ----------
+  var MUEBLES = [[0x121211, 0.7], [0xECEAE4, 0.55], [0x4A2E1C, 0.62], [0xA77B4F, 0.68], [0x4B4B4D, 0.6]];   // negro, blanco, marrón, roble, gris grafito
+  function mueble(i){
+    mMueble.color.setHex(MUEBLES[i][0]); mMueble.roughness = MUEBLES[i][1];
+    for (var k = 0; k < MUEBLES.length; k++){
+      document.getElementById('m'+k).setAttribute('aria-pressed', k === i ? 'true' : 'false');
+    }
+    pinta();
+  }
+  for (var k3 = 0; k3 < MUEBLES.length; k3++){
+    (function(k){
+      document.getElementById('m'+k).addEventListener('click', function(){ mueble(k); });
+    })(k3);
+  }
+
+  vetas('dorado');
   tono(0);
+  mueble(0);
   document.getElementById('luz').click();     // arranca de noche, con el LED del TV encendido
   var v0 = vistas.b1;
   vistaDesde(v0[0], v0[1], v0[2], v0[3], v0[4], v0[5]);
