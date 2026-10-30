@@ -207,9 +207,10 @@ footer .ico{height:34px;width:auto;display:block}
   <section>
     <h2>Vetas del mármol</h2>
     <div class="opts" role="group" aria-label="Vetas del mármol">
+      <button type="button" id="v4" aria-pressed="true">Ónix gris con hilos dorados</button>
       <button type="button" id="v0" aria-pressed="false">Hilos dorados</button>
       <button type="button" id="v1" aria-pressed="false">Hilos grises</button>
-      <button type="button" id="v2" aria-pressed="true">Hilos negros</button>
+      <button type="button" id="v2" aria-pressed="false">Hilos negros</button>
       <button type="button" id="v3" aria-pressed="false">Hilos beige</button>
     </div>
   </section>
@@ -220,10 +221,14 @@ footer .ico{height:34px;width:auto;display:block}
       <button type="button" class="sw" id="t0" aria-pressed="false" aria-label="Marrón" style="background:#4A2E1C"></button>
       <button type="button" class="sw" id="t1" aria-pressed="false" aria-label="Marrón claro" style="background:#8A5A36"></button>
       <button type="button" class="sw" id="t2" aria-pressed="false" aria-label="Roble" style="background:#A77B4F"></button>
-      <button type="button" class="sw" id="t3" aria-pressed="true" aria-label="Gris" style="background:#9A958C"></button>
+      <button type="button" class="sw" id="t3" aria-pressed="false" aria-label="Gris" style="background:#9A958C"></button>
       <button type="button" class="sw" id="t4" aria-pressed="false" aria-label="Negro" style="background:#1E1D1B"></button>
+      <button type="button" class="sw" id="t5" aria-pressed="true" aria-label="Negro mate" style="background:#161616"></button>
+      <button type="button" class="sw" id="t6" aria-pressed="false" aria-label="Roble natural" style="background:#C8955A"></button>
+      <button type="button" class="sw" id="t7" aria-pressed="false" aria-label="Gris lino" style="background:#4A4A4C"></button>
+      <button type="button" class="sw" id="t8" aria-pressed="false" aria-label="Gris espiga" style="background:#8F8A85"></button>
     </div>
-    <p class="desc" style="min-height:0">Con hilos dorados o beige lucen mejor el marrón, el marrón claro o el roble. Con hilos grises o negros, el gris o el negro.</p>
+    <p class="desc" style="min-height:0">Con la lámina de ónix gris y hilos dorados recomendamos el negro mate: enmarca la pared y combina con el dorado. El roble natural es la opción cálida.</p>
   </section>
 
   <section>
@@ -395,16 +400,20 @@ footer .ico{height:34px;width:auto;display:block}
     dorado: [['184,140,58', 0.9, 2.4, 7], ['205,165,80', 0.7, 1, 10]],
     gris:   [['110,110,112', 0.8, 2.6, 8], ['140,140,144', 0.6, 1, 10]],
     negro:  [['28,28,30', 0.85, 2.6, 8], ['55,55,58', 0.6, 1, 10]],
-    beige:  [['150,118,84', 0.9, 2.6, 8], ['176,148,114', 0.7, 1, 10]]
+    beige:  [['150,118,84', 0.9, 2.6, 8], ['176,148,114', 0.7, 1, 10]],
+    // ónix: fondo gris claro, vetas grises anchas y suaves, pocas vetas doradas
+    onix:   [['150,152,156', 0.45, 7, 5], ['125,127,132', 0.5, 1.4, 7], ['196,148,48', 0.95, 3.6, 3]]
   };
+  var FONDO = {onix: '#e4e6e6'};
   function marmol(semilla, clave){
     return lienzoTex(768, 1792, function(g, w, h){
       var r = azar(semilla), i;
-      g.fillStyle = '#f7f6f2'; g.fillRect(0, 0, w, h);
+      g.fillStyle = FONDO[clave] || '#f7f6f2'; g.fillRect(0, 0, w, h);
       for (i = 0; i < 70; i++){
         var x = r()*w, y = r()*h, rad = 80 + r()*260;
         var gr = g.createRadialGradient(x, y, 0, x, y, rad);
-        gr.addColorStop(0, 'rgba(200,198,192,.10)'); gr.addColorStop(1, 'rgba(200,198,192,0)');
+        var nube = clave === 'onix' ? 'rgba(170,173,176,.22)' : 'rgba(200,198,192,.10)';
+        gr.addColorStop(0, nube); gr.addColorStop(1, 'rgba(200,198,192,0)');
         g.fillStyle = gr; g.fillRect(0, 0, w, h);
       }
       function veta(rgb, alfa, ancho, n){
@@ -529,17 +538,16 @@ footer .ico{height:34px;width:auto;display:block}
     });
   }
 
-  // wall panel acanalado: base y canales de media caña
-  var tiras = [];
+  // wall panel: fondo oscuro (la ranura) y lamas planas encima, como el producto real
+  var mRanuraWpc = new THREE.MeshStandardMaterial({color:0x050505, roughness:0.8});
+  var tiras = [], LAMA = 2.0, RANURA = 0.65;
   for (var q = 0; q < N_TIRAS; q++){ tiras.push([q*TIRA, (q+1)*TIRA]); tiras.push([L - (q+1)*TIRA, L - q*TIRA]); }
   tiras.forEach(function(t){
-    placa(t[0], t[1], RODAPIE, 1, Z0, mWpc, gWpc);
-    var n = Math.max(3, Math.round((t[1]-t[0]) / 2.6)), paso = (t[1]-t[0]) / n;
+    placa(t[0], t[1], RODAPIE, 0.6, Z0, mRanuraWpc, gWpc);
+    var n = Math.max(3, Math.round((t[1]-t[0]) / (LAMA + RANURA))), paso = (t[1]-t[0]) / n;
     for (var k = 0; k < n; k++){
-      var x = t[0] + paso*(k + 0.5), hh = alturaEn(x) - RODAPIE;
-      var c = new THREE.Mesh(new THREE.CylinderGeometry(paso*0.42, paso*0.42, hh, 14, 1, false, -Math.PI/2, Math.PI), mWpc);
-      c.position.set(x, RODAPIE + hh/2, Z0 + 1); c.castShadow = true; c.receiveShadow = true;
-      gWpc.add(c);
+      var x0 = t[0] + paso*k + RANURA/2;
+      placa(x0, x0 + paso - RANURA, RODAPIE, 1, Z0 + 0.6, mWpc, gWpc);
     }
   });
 
@@ -704,8 +712,8 @@ footer .ico{height:34px;width:auto;display:block}
     pinta();
   });
 
-  var CLAVES_VETA = ['dorado', 'gris', 'negro', 'beige'];
-  var BOT_VETA = ['v0', 'v1', 'v2', 'v3'];
+  var CLAVES_VETA = ['dorado', 'gris', 'negro', 'beige', 'onix'];
+  var BOT_VETA = ['v0', 'v1', 'v2', 'v3', 'v4'];
   BOT_VETA.forEach(function(id, i){
     document.getElementById(id).addEventListener('click', function(){
       vetas(CLAVES_VETA[i]);
@@ -715,9 +723,11 @@ footer .ico{height:34px;width:auto;display:block}
   });
 
   // ---------- tono del wall panel ----------
-  var TONOS = [[0x4A2E1C, 0.62], [0x8A5A36, 0.66], [0xA77B4F, 0.7], [0x9A958C, 0.72], [0x1E1D1B, 0.55]];   // marrón, marrón claro, roble, gris, negro
+  var TONOS = [[0x4A2E1C, 0.62], [0x8A5A36, 0.66], [0xA77B4F, 0.7], [0x9A958C, 0.72], [0x1E1D1B, 0.55],
+               [0x161616, 0.6], [0xC8955A, 0.55], [0x4A4A4C, 0.7], [0x8F8A85, 0.65]];   // marrón, marrón claro, roble, gris, negro · los de la tienda: negro mate, roble natural, gris lino, gris espiga
   function tono(i){
     mWpc.color.setHex(TONOS[i][0]); mWpc.roughness = TONOS[i][1];
+    mRanuraWpc.color.setHex(TONOS[i][0]).multiplyScalar(0.4);   // la ranura, más oscura que la lama
     for (var k = 0; k < TONOS.length; k++){
       document.getElementById('t'+k).setAttribute('aria-pressed', k === i ? 'true' : 'false');
     }
@@ -744,8 +754,8 @@ footer .ico{height:34px;width:auto;display:block}
     })(k3);
   }
 
-  vetas('negro');     // arranca con hilos negros, wall panel gris y mueble roble (Ricardo, 29-10)
-  tono(3);
+  vetas('onix');      // arranca con la lámina que va a comprar Ricardo y el wall panel negro mate (30-10)
+  tono(5);
   mueble(3);
   gPerfiles.visible = false;     // arranca sin perfiles dorados (Ricardo, 29-10)
   document.getElementById('luz').click();     // arranca de noche, con el LED del TV encendido
